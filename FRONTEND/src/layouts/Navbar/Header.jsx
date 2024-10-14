@@ -6,7 +6,7 @@ import styles from "./Header.module.css";
 import { useNavigate } from "react-router-dom";
 import Search from "./Search/Search";
 
-const Header = ({ isAuthenticated, setIsAuthenticated }) => {
+const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [searchModal, setSearchModal] = useState(false);
@@ -41,17 +41,6 @@ const Header = ({ isAuthenticated, setIsAuthenticated }) => {
     navigate("/");
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("user-info");
-    setIsAuthenticated(false);
-    navigate("/login");
-  };
-
-  const userInfo = JSON.parse(localStorage.getItem("user-info"));
-  const userName = userInfo ? userInfo.name : "Guest";
-  const userImage = userInfo ? userInfo.image : "";
-  console.log(userImage);
-
   return (
     <>
       <header className={styles.mainHeader}>
@@ -76,21 +65,7 @@ const Header = ({ isAuthenticated, setIsAuthenticated }) => {
                   }`}
                   ref={dropdownRef}
                 >
-                  {isAuthenticated ? (
-                    <>
-                      <div className={styles.userInfo}>
-                        {userImage && <img src={userImage} className={styles.userImage} />}
-                        <span className={styles.userName}>{userName}</span>
-                      </div>
-                      <button className={styles.dropdownButton} onClick={handleLogout}>
-                        Logout
-                      </button>
-                    </>
-                  ) : (
-                    <button className={styles.dropdownButton} onClick={() => navigate("/login")}>
-                      Login
-                    </button>
-                  )}
+                  <button className={styles.dropdownButton}>Login</button>
                 </div>
               )}
             </div>

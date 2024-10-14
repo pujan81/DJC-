@@ -16,10 +16,10 @@ const Product = ({ data, id }) => {
   };
 
   return (
-    <div className={styles.productCard} onClick={handleProductClick}>
+    <div className={styles.productCard} >
       <div className={styles.thumbnail}>
-        <img src={data.image} alt={data.name} />
-        <button className={styles.wishlistButtonr} onClick={toggleWishlist}>
+        <img src={data.image} alt={data.name} onClick={handleProductClick}/>
+        <button className={styles.wishlistButton} onClick={toggleWishlist}>
           {isWishlisted ? <FaHeart /> : <FaRegHeart />}
         </button>
       </div>

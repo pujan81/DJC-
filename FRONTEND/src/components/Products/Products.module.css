@@ -7,7 +7,7 @@
     margin: 0 auto;
     position: relative;
     background: transparent;
-    gap: 20px;
+    gap: 80px;
 }
 
 .productsContainer::before{
@@ -18,14 +18,17 @@
     left: 0;
     right: 0;
     z-index: -1;
-    background: linear-gradient(to left, transparent 50%, rgba(218, 165, 32, 0.2)),
-                linear-gradient(to right,transparent 50%, rgba(218, 165, 32, 0.2));
+    background: linear-gradient(135deg, 
+                rgba(255, 198, 52, 0.1) 0%, 
+                rgba(255, 198, 52, 0.05) 50%, 
+                rgba(255, 198, 52, 0.1) 100%);
     filter: blur(50px);
   }
 
 @media only screen and (min-width: 768px) {
     .productsContainer {
         margin: 75px 0;
+        gap: 20px;
     }
 }
 

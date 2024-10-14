@@ -8,8 +8,8 @@ const Filters = ({ onFilterChange }) => {
 
   return (
     <div className={styles.filters}>
+      <label htmlFor="price-filter">FILTER BY:</label>
       <div className={styles.left}>
-        <label htmlFor="price-filter">FILTER BY:</label>
         <select id="price-filter" onChange={handleFilterChange('price')}>
           <option value="">PRICE</option>
           <option value="under-100">Under ₹100</option>

@@ -15,7 +15,7 @@
     z-index: 999;
     top: 0;
     left: 0;
-    background: rgba(255, 255, 255, 0.2); /* Semi-transparent background */
+    background: rgba(0, 0, 0, 0.2); /* Semi-transparent background */
     backdrop-filter: blur(10px); /* Glassy effect */
     transform: translateY(100%);
     animation: slideSearchWindow 0.5s ease forwards;
