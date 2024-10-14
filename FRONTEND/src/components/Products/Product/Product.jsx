@@ -16,9 +16,13 @@ const Product = ({ data, id }) => {
   };
 
   return (
-    <div className={styles.productCard} >
+    <div className={styles.productCard}>
       <div className={styles.thumbnail}>
-        <img src={data.image-urls[0]} alt={data.product_name} onClick={handleProductClick}/>
+        <img
+          src={data.image_urls[0]}
+          alt={data.product_name}
+          onClick={handleProductClick}
+        />
         <button className={styles.wishlistButton} onClick={toggleWishlist}>
           {isWishlisted ? <FaHeart /> : <FaRegHeart />}
         </button>

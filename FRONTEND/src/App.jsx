@@ -18,6 +18,7 @@ import Personalize_Page from "./pages/Customization/Customization_Page";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import RefreshHandler from "./utils/RefreshHandler";
 import Login from "./components/Auth/Login";
+import AppContext from "./utils/context";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -39,22 +40,20 @@ function App() {
   };
   return (
     <>
-      <Preloader />
       <BrowserRouter>
-        <RefreshHandler setisAuthenticated={setIsAuthenticated} />
-        <MainContent
-          isAuthenticated={isAuthenticated}
-          setIsAuthenticated={setIsAuthenticated}
-        />
-        <Footer />
+        <AppContext>
+          <RefreshHandler setisAuthenticated={setIsAuthenticated} />
+          <MainContent
+            isAuthenticated={isAuthenticated}
+            setIsAuthenticated={setIsAuthenticated}
+          />
+        </AppContext>
       </BrowserRouter>
     </>
   );
 }
 
 const MainContent = ({ isAuthenticated, setIsAuthenticated }) => {
-
-  
   const PrivateRoute = ({ element }) => {
     return isAuthenticated ? element : <Navigate to="/login" />;
   };
@@ -71,11 +70,15 @@ const MainContent = ({ isAuthenticated, setIsAuthenticated }) => {
 
   return (
     <>
+      <Preloader />
       {location.pathname !== "/login" && (
-        <Header isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
+        <Header
+          isAuthenticated={isAuthenticated}
+          setIsAuthenticated={setIsAuthenticated}
+        />
       )}
       <Routes>
-        <Route path="/login" element={<GoogleAuthWrapper/>} />
+        <Route path="/login" element={<GoogleAuthWrapper />} />
         <Route path="/" element={<Home_Page />} />
         <Route path="/home" element={<Home_Page />} />
         <Route path="/products" element={<Products_Page />} />
@@ -90,6 +93,7 @@ const MainContent = ({ isAuthenticated, setIsAuthenticated }) => {
         />
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
+      <Footer />
     </>
   );
 };

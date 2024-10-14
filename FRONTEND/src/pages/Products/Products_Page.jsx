@@ -1,8 +1,8 @@
 import React, { useEffect, useContext, useState } from "react";
 import styles from "./Products_Page.module.css";
 import Products from "../../components/Products/Products";
-import { fetchDataFromApi } from "../../utils/api.jsx";
-import { Context } from "../../utils/context.jsx";
+import { fetchDataFromApi } from "../../utils/api";
+import { Context } from "../../utils/context";
 
 const initialProducts = [
   {
@@ -83,17 +83,20 @@ const initialProducts = [
 
 function Products_Page() {
   const { products, setProducts } = useContext(Context);
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     getProducts();
   }, []);
 
   const getProducts = async () => {
-    setIsLoading(true); // Start loading
-    const res = await fetchDataFromApi("/api/products");
-    setProducts(res);
-    setIsLoading(false); // End loading
+    try {
+      const res = await fetchDataFromApi("/api/products");
+      console.log("API response:", res);
+      setProducts(res);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
   };
 
   return (
