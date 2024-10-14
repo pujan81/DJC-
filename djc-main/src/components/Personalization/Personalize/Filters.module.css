@@ -1,0 +1,74 @@
+.filters {
+    display: flex;
+    justify-content: space-between; /* Space between filters and sort by */
+    align-items: center;
+    padding: 1rem;
+    background-color: rgba(69, 50, 0, 1);
+    border-bottom: 1px solid rgba(218, 165, 32, 0.6);
+    color: #e0e0e0;
+    width: 100%;
+    position: sticky;
+    z-index: 3;
+    top: 0; /* Ensure stickiness at the top */
+}
+
+.filters .left {
+    display: flex;
+    flex-wrap: wrap; /* Wrap filters within the left section */
+    align-items: center;
+    gap: 10px; /* Adjust gap for better spacing */
+    flex: 1; /* Allow left section to take available space */
+}
+
+.filters .right {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Adjust gap for better spacing */
+    flex-shrink: 0; /* Prevent the right section from shrinking */
+}
+
+.filters select {
+    padding: 0.5rem;
+    background-color: #000000;
+    color: goldenrod;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    height: 40px;
+    font-size: 12px;
+    border: 1px solid goldenrod; /* Ensure visibility */
+    width: 100%; /* Full width for each select */
+    max-width: 120px; /* Limit width */
+}
+
+.filters label {
+    font-size: 14px;
+    color: #ffffff;
+    margin-bottom: 5px; /* Align with the dropdown */
+    white-space: nowrap; /* Prevent label from wrapping */
+}
+
+@media (max-width: 925px) {
+    .filters {
+        flex-direction: column; /* Stack items vertically */
+        align-items: flex-start;
+        gap: 15px; /* Increase gap for clarity */
+    }
+
+    .filters .left, 
+    .filters .right {
+        width: 100%; /* Full width for mobile */
+        justify-content: flex-start;
+    }
+
+    .filters .right {
+        margin-top: 10px; /* Add space between left and right sections */
+    }
+
+    .filters select {
+        width: 100%; /* Full width for mobile */
+        font-size: 10px; /* Larger font for readability */
+    }
+}

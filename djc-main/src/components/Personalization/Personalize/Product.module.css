@@ -1,0 +1,84 @@
+.productCard {
+    cursor: pointer;
+    width: calc(50% - 5px);
+    /* margin-bottom: 20px; */
+    border: 1px solid rgba(218, 165, 32, 0.6);
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* border-radius: 10px; */
+}
+
+@media only screen and (min-width: 768px) {
+    .productCard {
+        width: calc(25% - 15px);
+    }
+}
+
+.productCard .thumbnail {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    background-color: rgba(255, 255, 255, 0.05);
+    margin-bottom: 10px;
+    display: flex;
+    overflow: hidden;
+}
+
+@media only screen and (min-width: 1225px) {
+    .productCard .thumbnail {
+        height: 350px;
+    }
+}
+
+.productCard .thumbnail img {
+    transition: all ease 0.3s;
+    display: block;
+    width: 100%;
+    object-fit: cover;
+}
+
+.wishlistButtonr {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #ffffff;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.productCard .prodDetails{
+    padding: 10px;
+}
+.productCard .prodDetails .name {
+    font-size: 14px;
+    display: block;
+    color: goldenrod;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+@media only screen and (min-width: 768px) {
+    .productCard .prodDetails .name {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+}
+
+.productCard .prodDetails .price {
+    font-size: 18px;
+    /* padding-left: 10px; */
+}
+
+@media only screen and (min-width: 768px) {
+    .productCard .prodDetails .price {
+        font-size: 24px;
+    }
+}
+
+.productCard:hover .thumbnail img {
+    transform: scale(1.08);
+}
