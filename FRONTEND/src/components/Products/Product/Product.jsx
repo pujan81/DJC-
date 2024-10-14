@@ -18,13 +18,13 @@ const Product = ({ data, id }) => {
   return (
     <div className={styles.productCard} >
       <div className={styles.thumbnail}>
-        <img src={data.image} alt={data.name} onClick={handleProductClick}/>
+        <img src={data.image-urls[0]} alt={data.product_name} onClick={handleProductClick}/>
         <button className={styles.wishlistButton} onClick={toggleWishlist}>
           {isWishlisted ? <FaHeart /> : <FaRegHeart />}
         </button>
       </div>
       <div className={styles.prodDetails}>
-        <span className={styles.name}>{data.name}</span>
+        <span className={styles.name}>{data.product_name}</span>
         <span className={styles.price}>&#8377;{data.price}</span>
       </div>
     </div>

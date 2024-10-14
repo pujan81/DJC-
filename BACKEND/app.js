@@ -3,7 +3,7 @@ const app = express();
 const cors = require("cors");
 const path = require("path");
 require("dotenv").config();
-const isLoggedIn = require("./middlewares/isLoggedIn")
+const isLoggedIn = require("./middlewares/isLoggedIn");
 
 const productRoute = require("./routes/product.route");
 const userRoute = require("./routes/user.route");
@@ -24,21 +24,15 @@ app.get("/hello", (req, res) => {
   res.send("Hello from node API. This is home page");
 });
 app.use("/api/auth", authRoute);
-app.use("/api/products" , productRoute);
-app.use("/api/cproducts" , cproductRoute);
-app.use("/api/cproduct-order",isLoggedIn, cproductorderRoute);
-app.use("/api/gemstone" , gemstoneRoute);
-app.use("/api/users" , userRoute);
-app.use("/api/orders",isLoggedIn , orderRoute);
-app.use("/api/cart" ,cartRoute);
+app.use("/api/products", productRoute);
+app.use("/api/cproducts", cproductRoute);
+app.use("/api/cproduct-order", isLoggedIn, cproductorderRoute);
+app.use("/api/gemstone", gemstoneRoute);
+app.use("/api/users", userRoute);
+app.use("/api/orders", isLoggedIn, orderRoute);
+app.use("/api/cart", cartRoute);
 app.use("/api/wishlist", wishlistRoute);
 
 connectDB();
 
-
-
-
 module.exports = app;
-
-
-

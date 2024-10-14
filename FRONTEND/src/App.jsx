@@ -82,11 +82,11 @@ const MainContent = ({ isAuthenticated, setIsAuthenticated }) => {
         <Route path="/products/:prodId" element={<SingleProduct_Page />} />
         <Route
           path="/personalize"
-          element={<PrivateRoute element={<Personalize_Page checkPageOne={true} />} />}
+          element={<Personalize_Page checkPageOne={true} />}
         />
         <Route
           path="/uploadIdea"
-          element={<PrivateRoute element={<Personalize_Page checkPageOne={false} />} />}
+          element={<Personalize_Page checkPageOne={false} />}
         />
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
