@@ -21,7 +21,6 @@ const Login = ({ setIsAuthenticated }) => {
         const obj = { email, name, image, user_id, token, isAdmin };
 
         localStorage.setItem("user-info", JSON.stringify(obj));
-        console.log("User info saved to localStorage:", obj);
 
         // Update the authentication state
         setIsAuthenticated(true);

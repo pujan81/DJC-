@@ -8,7 +8,6 @@ export const googleAuth = (code) => api.get(`/google?code=${code}`);
 
 // Ensure your environment variables are set up correctly
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL; // Your new backend URL
-console.log(API_BASE_URL);
 
 // Axios instance for making API requests
 const axiosInstance = axios.create({

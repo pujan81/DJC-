@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import ImageGallery from "./Personalize/ImageGallery";
 import ProductInfo from "./Personalize/ProductInfo";
 import styles from "./PersonalizedPage1.module.css";
@@ -17,8 +17,7 @@ const initialGems = [
     material: "Diamond",
     carat: 1.5,
     gender: "unisex",
-    image:
-      "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
+    image: "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
     isBestseller: true,
   },
   {
@@ -28,8 +27,7 @@ const initialGems = [
     material: "Emerald",
     carat: 2.0,
     gender: "female",
-    image:
-      "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
+    image: "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
   },
   {
     name: "The Classic Ruby Earrings",
@@ -38,8 +36,7 @@ const initialGems = [
     material: "Ruby",
     carat: 1.2,
     gender: "female",
-    image:
-      "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
+    image: "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
     isBestseller: false,
   },
   {
@@ -49,8 +46,7 @@ const initialGems = [
     material: "Sapphire",
     carat: 1.8,
     gender: "unisex",
-    image:
-      "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
+    image: "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
   },
   {
     name: "The Elegant Topaz Bracelet",
@@ -59,8 +55,7 @@ const initialGems = [
     material: "Diamond",
     carat: 2.5,
     gender: "female",
-    image:
-      "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
+    image: "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
     isBestseller: true,
   },
   {
@@ -70,8 +65,7 @@ const initialGems = [
     material: "Diamond",
     carat: 2.0,
     gender: "female",
-    image:
-      "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
+    image: "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
   },
   {
     name: "The Amethyst Gold Pendant",
@@ -80,8 +74,7 @@ const initialGems = [
     material: "Ruby",
     carat: 1.7,
     gender: "unisex",
-    image:
-      "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
+    image: "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
   },
   {
     name: "The Citrine Diamond Ring",
@@ -90,8 +83,7 @@ const initialGems = [
     material: "Emerald",
     carat: 1.4,
     gender: "female",
-    image:
-      "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
+    image: "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
   },
   {
     name: "The Ruby Gold Bangle",
@@ -100,8 +92,7 @@ const initialGems = [
     material: "Ruby",
     carat: 2.3,
     gender: "female",
-    image:
-      "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
+    image: "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
   },
   {
     name: "The Elegant Opal Earrings",
@@ -110,8 +101,7 @@ const initialGems = [
     material: "Sapphire",
     carat: 1.9,
     gender: "female",
-    image:
-      "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
+    image: "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
   },
   {
     name: "The Luxurious Garnet Necklace",
@@ -120,8 +110,7 @@ const initialGems = [
     material: "Ruby",
     carat: 2.6,
     gender: "female",
-    image:
-      "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
+    image: "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
     isBestseller: true,
   },
 ];
@@ -134,8 +123,7 @@ const initialSettings = [
     material: "Diamond",
     carat: 1.5,
     gender: "unisex",
-    image:
-      "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
+    image: "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
     isBestseller: true,
   },
   {
@@ -145,8 +133,7 @@ const initialSettings = [
     material: "Emerald",
     carat: 2.0,
     gender: "female",
-    image:
-      "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
+    image: "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
   },
   {
     name: "The Classic Ruby Earrings",
@@ -155,8 +142,7 @@ const initialSettings = [
     material: "Ruby",
     carat: 1.2,
     gender: "female",
-    image:
-      "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
+    image: "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
     isBestseller: false,
   },
   {
@@ -166,8 +152,7 @@ const initialSettings = [
     material: "Sapphire",
     carat: 1.8,
     gender: "unisex",
-    image:
-      "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
+    image: "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
   },
   {
     name: "The Elegant Topaz Bracelet",
@@ -176,8 +161,7 @@ const initialSettings = [
     material: "Diamond",
     carat: 2.5,
     gender: "female",
-    image:
-      "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
+    image: "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
     isBestseller: true,
   },
   {
@@ -187,8 +171,7 @@ const initialSettings = [
     material: "Diamond",
     carat: 2.0,
     gender: "female",
-    image:
-      "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
+    image: "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
   },
   {
     name: "The Amethyst Gold Pendant",
@@ -197,8 +180,7 @@ const initialSettings = [
     material: "Ruby",
     carat: 1.7,
     gender: "unisex",
-    image:
-      "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
+    image: "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
   },
   {
     name: "The Citrine Diamond Ring",
@@ -207,8 +189,7 @@ const initialSettings = [
     material: "Emerald",
     carat: 1.4,
     gender: "female",
-    image:
-      "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
+    image: "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
   },
   {
     name: "The Ruby Gold Bangle",
@@ -217,8 +198,7 @@ const initialSettings = [
     material: "Ruby",
     carat: 2.3,
     gender: "female",
-    image:
-      "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
+    image: "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
   },
   {
     name: "The Elegant Opal Earrings",
@@ -227,8 +207,7 @@ const initialSettings = [
     material: "Sapphire",
     carat: 1.9,
     gender: "female",
-    image:
-      "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
+    image: "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
   },
   {
     name: "The Luxurious Garnet Necklace",
@@ -237,123 +216,108 @@ const initialSettings = [
     material: "Ruby",
     carat: 2.6,
     gender: "female",
-    image:
-      "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
+    image: "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
     isBestseller: true,
   },
 ];
 
 const filterGems = (gems, filters) => {
   return gems.filter((gem) => {
-    const matchesGemstone =
-      !filters.selectedGemstone || gem.material === filters.selectedGemstone;
+    const matchesGemstone = !filters.selectedGemstone || gem.material === filters.selectedGemstone;
     const matchesPrice = gem.price >= filters.minPrice;
     const matchesCarat = !filters.minCarat || gem.carat >= filters.minCarat;
-
     return matchesGemstone && matchesPrice && matchesCarat;
   });
 };
 
-const PersonalizedPage1 = ({checkPageOne}) => {
+const PersonalizedPage1 = ({ checkPageOne }) => {
   const [filteredGems, setFilteredGems] = useState(initialGems);
   const [selectedGem, setSelectedGem] = useState(null);
   const [filteredSettings, setFilteredSettings] = useState(initialSettings);
   const [appliedFilters, setAppliedFilters] = useState({});
   const [selectedSetting, setSelectedSetting] = useState(null);
   const [chooseGem, setChooseGem] = useState(true);
-  const [chooseSetting, setChooseSetting] = useState(false);
   const [isPageOne, setIsPageOne] = useState(checkPageOne);
   const navigate = useNavigate();
 
-  const handleApplyFilters = (filters) => {
-    const newFilteredGems = filterGems(initialGems, filters);
-    setFilteredGems(newFilteredGems);
-  };
+  const handleApplyFilters = useCallback((filters) => {
+    setFilteredGems(filterGems(initialGems, filters));
+  }, []);
 
-  const handleResetFilters = () => {
+  const handleResetFilters = useCallback(() => {
     setFilteredGems(initialGems);
-  };
+  }, []);
 
-  const handleGemSelect = (gem) => {
+  const handleGemSelect = useCallback((gem) => {
     setSelectedGem(gem);
     window.scrollTo({ top: 100, behavior: "smooth" });
-  };
+  }, []);
 
-  const handleSettingSelect = (setting) => {
+  const handleSettingSelect = useCallback((setting) => {
     setSelectedSetting(setting);
     window.scrollTo({ top: 100, behavior: "smooth" });
-  };
+  }, []);
 
-  const handleRemoveGem = () => {
+  const handleRemoveGem = useCallback(() => {
     setSelectedGem(null);
-  };
+  }, []);
 
-  const handleRemoveSetting = () => {
+  const handleRemoveSetting = useCallback(() => {
     setSelectedSetting(null);
-  };
-  // settings filter
-  const handleFilterChange = (filter, value) => {
+  }, []);
+
+  const handleFilterChange = useCallback((filter, value) => {
     setAppliedFilters((prevFilters) => {
       const newFilters = { ...prevFilters, [filter]: value };
-
       if (!value) {
         delete newFilters[filter];
       }
-
       return newFilters;
     });
-  };
+  }, []);
 
-  React.useEffect(() => {
-    let filtered = [...initialSettings];
-    for (const [filter, value] of Object.entries(appliedFilters)) {
-      if (filter === "price") {
-        if (value === "under-100") {
-          filtered = filtered.filter((product) => product.price <= 100);
-        } else if (value === "under-500") {
-          filtered = filtered.filter((product) => product.price <= 500);
-        } else if (value === "under-1000") {
-          filtered = filtered.filter((product) => product.price <= 1000);
-        }
-      } else if (filter === "category") {
-        filtered = filtered.filter(
-          (product) => product.metal.toLowerCase() === value.toLowerCase()
-        );
-      } else if (filter === "material") {
-        filtered = filtered.filter(
-          (product) => product.material.toLowerCase() === value.toLowerCase()
-        );
-      } else if (filter === "gender") {
-        filtered = filtered.filter(
-          (product) => product.gender.toLowerCase() === value.toLowerCase()
-        );
-      }
-    }
-
-    setFilteredSettings(filtered);
-  }, [appliedFilters, initialSettings]);
-  //
-  const handleChooseGem = () => {
+  const handleChooseGem = useCallback(() => {
     setChooseGem(true);
-    setChooseSetting(false);
     setAppliedFilters({});
-  };
+  }, []);
 
-  const handleChooseSetting = () => {
+  const handleChooseSetting = useCallback(() => {
     setChooseGem(false);
-    setChooseSetting(true);
     setFilteredGems(initialGems);
-  };
+  }, []);
 
-  const handlePage1 = () => {
+  const handlePage1 = useCallback(() => {
     setIsPageOne(true);
     navigate("/personalize");
-  };
+  }, [navigate]);
 
-  const handlePage2 = () => {
+  const handlePage2 = useCallback(() => {
     setIsPageOne(false);
     navigate("/uploadIdea");
-  };
+  }, [navigate]);
+
+  const memoizedFilteredSettings = useMemo(() => {
+    return initialSettings.filter((product) => {
+      for (const [filter, value] of Object.entries(appliedFilters)) {
+        if (filter === "price") {
+          if (value === "under-100" && product.price > 100) return false;
+          if (value === "under-500" && product.price > 500) return false;
+          if (value === "under-1000" && product.price > 1000) return false;
+        } else if (filter === "category" && product.metal.toLowerCase() !== value.toLowerCase()) {
+          return false;
+        } else if (filter === "material" && product.material.toLowerCase() !== value.toLowerCase()) {
+          return false;
+        } else if (filter === "gender" && product.gender.toLowerCase() !== value.toLowerCase()) {
+          return false;
+        }
+      }
+      return true;
+    });
+  }, [appliedFilters]);
+
+  React.useEffect(() => {
+    setFilteredSettings(memoizedFilteredSettings);
+  }, [memoizedFilteredSettings]);
 
   return (
     <div className={styles.Personalized}>
@@ -384,7 +348,7 @@ const PersonalizedPage1 = ({checkPageOne}) => {
               />
             </div>
             <div className={styles.rightColumn}>
-              <ProductInfo
+            <ProductInfo
                 selectedGem={selectedGem}
                 selectedSetting={selectedSetting}
               />
@@ -400,26 +364,19 @@ const PersonalizedPage1 = ({checkPageOne}) => {
               onChooseSetting={handleChooseSetting}
             />
           </div>
-          {chooseGem && (
+          {chooseGem ? (
             <GemstoneFilter
               onApplyFilters={handleApplyFilters}
               onResetFilters={handleResetFilters}
             />
-          )}
-          {chooseSetting && <Filters onFilterChange={handleFilterChange} />}
-          {chooseGem ? (
-            <Products
-              products={filteredGems}
-              onProductSelect={handleGemSelect}
-              productType={"gem"}
-            />
           ) : (
-            <Products
-              products={filteredSettings}
-              onProductSelect={handleSettingSelect}
-              productType={"setting"}
-            />
+            <Filters onFilterChange={handleFilterChange} />
           )}
+          <Products
+            products={chooseGem ? filteredGems : filteredSettings}
+            onProductSelect={chooseGem ? handleGemSelect : handleSettingSelect}
+            productType={chooseGem ? "gem" : "setting"}
+          />
         </div>
       ) : (
         <Propose />
