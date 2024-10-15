@@ -83,27 +83,23 @@ const initialProducts = [
 
 function Products_Page() {
   const { products, setProducts } = useContext(Context);
-  // const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const res = await fetchDataFromApi("/api/products");
+        console.log("API response:", res);
+        setProducts(res.length > 0 ? res : initialProducts);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        setProducts(initialProducts);
+      }
+    };
+
     getProducts();
-  }, []);
+  }, [setProducts]);
 
-  const getProducts = async () => {
-    try {
-      const res = await fetchDataFromApi("/api/products");
-      console.log("API response:", res);
-      setProducts(res);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    }
-  };
-
-  return (
-    <>
-      <Products products={products} />
-    </>
-  );
+  return <Products products={products} />;
 }
 
 export default Products_Page;
