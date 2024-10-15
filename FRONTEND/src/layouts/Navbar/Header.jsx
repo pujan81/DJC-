@@ -1,19 +1,28 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useContext,
+} from "react";
 import { TbSearch } from "react-icons/tb";
 import { IoBagOutline } from "react-icons/io5";
 import { LuUser } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import styles from "./Header.module.css";
 import Search from "./Search/Search";
+import { Context } from "../../utils/context";
+import Cart from "../../components/Cart/Cart";
 
 const Header = ({ isAuthenticated, setIsAuthenticated }) => {
+  const { cartCount, showCart, setShowCart } = useContext(Context);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [searchModal, setSearchModal] = useState(false);
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
   const toggleUserDropdown = useCallback(() => {
-    setUserDropdownOpen(prev => !prev);
+    setUserDropdownOpen((prev) => !prev);
   }, []);
 
   const handleClickOutside = useCallback((event) => {
@@ -63,7 +72,7 @@ const Header = ({ isAuthenticated, setIsAuthenticated }) => {
       <header className={styles.mainHeader}>
         <div className={styles.headerContent}>
           <ul className={styles.left}>
-            {navItems.map(item => (
+            {navItems.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
@@ -83,7 +92,11 @@ const Header = ({ isAuthenticated, setIsAuthenticated }) => {
                     <>
                       <div className={styles.userInfo}>
                         {userImage && (
-                          <img src={userImage} alt="User" className={styles.userImage} />
+                          <img
+                            src={userImage}
+                            alt="User"
+                            className={styles.userImage}
+                          />
                         )}
                         <span className={styles.userName}>{userName}</span>
                       </div>
@@ -105,13 +118,15 @@ const Header = ({ isAuthenticated, setIsAuthenticated }) => {
                 </div>
               )}
             </div>
-            <span className={styles.cartIcon}>
+            <span className={styles.cartIcon} onClick={() => setShowCart(true)}>
               <IoBagOutline />
+              {!!cartCount && <span>{cartCount}</span>}
             </span>
           </div>
         </div>
       </header>
       {searchModal && <Search setSearchModal={setSearchModal} />}
+      {showCart && <Cart />}
     </>
   );
 };

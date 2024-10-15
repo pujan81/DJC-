@@ -88,10 +88,10 @@ function Products_Page() {
     const getProducts = async () => {
       try {
         const res = await fetchDataFromApi("/api/products");
-        console.log("API response:", res);
+        // console.log("API response:", res);
         setProducts(res.length > 0 ? res : initialProducts);
       } catch (error) {
-        console.error("Error fetching products:", error);
+        // console.error("Error fetching products:", error);
         setProducts(initialProducts);
       }
     };

@@ -23,8 +23,8 @@
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 overflow: hidden;
-                font-size: 16px;
-                line-height: 1;
+                font-size: 5px;
+                // line-height: 1;
                 margin-bottom: 10px;
                 font-weight: 600;
                 display: block;
@@ -37,7 +37,7 @@
                 font-size: 12px;
                 font-weight: 600;
                 .highlight {
-                    color: #00970d;
+                    color: goldenrod;
                 }
             }
             svg {
@@ -59,7 +59,7 @@
                     align-items: center;
                     justify-content: center;
                     cursor: pointer;
-                    color: #6b6b6b;
+                    color: #ffffff;
                     &:nth-child(1) {
                         font-size: 18px;
                         border-right: 1px solid rgba(0, 0, 0, 0.1);

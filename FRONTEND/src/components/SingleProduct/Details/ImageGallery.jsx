@@ -4,17 +4,18 @@ import styles from "./ImageGallery.module.css";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { FaWandMagicSparkles } from "react-icons/fa6";
 
-const ImageGallery = () => {
+const ImageGallery = ({ data }) => {
   const [mainImage, setMainImage] = useState(0);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
-  const images = [
-    "https://blingbox.in/cdn/shop/products/antique-square-tassel-earrings-bling-box-jewellery-30558003364028.jpg?v=1661331072&width=1080",
-    "https://www.voylla.com/cdn/shop/products/PRBOM20048_CS.jpg?v=1692788246",
-    "https://i.pinimg.com/736x/3b/4a/81/3b4a8145378ac027f861c95c765a8f24.jpg",
-    "https://artofgold.in/wp-content/uploads/2023/09/M26.jpg",
-  ];
-
+  // const images = [
+  //   "https://blingbox.in/cdn/shop/products/antique-square-tassel-earrings-bling-box-jewellery-30558003364028.jpg?v=1661331072&width=1080",
+  //   "https://www.voylla.com/cdn/shop/products/PRBOM20048_CS.jpg?v=1692788246",
+  //   "https://i.pinimg.com/736x/3b/4a/81/3b4a8145378ac027f861c95c765a8f24.jpg",
+  //   "https://artofgold.in/wp-content/uploads/2023/09/M26.jpg",
+  // ];
+  const images =
+    data && Array.isArray(data.image_urls) ? [...data.image_urls] : [];
   useEffect(() => {
     if (showNotification) {
       const timer = setTimeout(() => {

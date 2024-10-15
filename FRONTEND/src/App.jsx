@@ -91,7 +91,7 @@ const MainContent = ({ isAuthenticated, setIsAuthenticated }) => {
           path="/uploadIdea"
           element={<Personalize_Page checkPageOne={false} />}
         />
-        <Route path="*" element={<Navigate to="/login" />} />
+        {/* <Route path="*" element={<Navigate to="/login" />} /> */}
       </Routes>
       <Footer />
     </>

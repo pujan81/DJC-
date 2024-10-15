@@ -43,6 +43,15 @@ const ProductSchema = mongoose.Schema(
     units_sold: {
       type: Number,
       required: false,
+      default: 0,
+    },
+    category: {
+      type: String,
+      required: true,
+    },
+    gender: {
+      type: String,
+      required: true,
     },
   },
   {

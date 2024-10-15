@@ -140,7 +140,7 @@ const Cart = () => {
 
   return (
     <div className="cart-panel">
-      <ToastContainer containerId="payment"/>
+      <ToastContainer containerId="payment" />
       <div className="opac-layer" onClick={() => setShowCart(false)}></div>
       <div className="cart-content">
         <div className="cart-header">
@@ -155,9 +155,6 @@ const Cart = () => {
           <div className="empty-cart">
             <BsBagX />
             <span>No products in the cart.</span>
-            <button className="return-cta" onClick={() => {}}>
-              RETURN TO SHOP
-            </button>
           </div>
         )}
 
@@ -188,7 +185,7 @@ const Cart = () => {
                 )}
               </div>
               <div className="subtotal">
-                <span className="text">Subtotal:</span>
+                <span className="text">Subtotal :</span>
                 <span className="text total">&#8377;{cartSubTotal}</span>
               </div>
               <div className="button">

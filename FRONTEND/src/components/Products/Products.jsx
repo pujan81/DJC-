@@ -36,7 +36,7 @@ const Products = ({ products }) => {
         }
       } else if (filter === "category") {
         filtered = filtered.filter(
-          (product) => product.metal.toLowerCase() === value.toLowerCase()
+          (product) => product.category.toLowerCase() === value.toLowerCase()
         );
       } else if (filter === "material") {
         filtered = filtered.filter(

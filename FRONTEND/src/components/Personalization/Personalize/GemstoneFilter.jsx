@@ -33,7 +33,7 @@ const GemstoneFilter = ({ onApplyFilters, onResetFilters }) => {
     <div className={styles.filterContainer}>
       <div className={styles.section}>
         <h3>
-          Shape <IoChevronDown />
+          Gemstone <IoChevronDown />
         </h3>
         <div className={styles.gemstoneGrid}>
           {gemstones.map((gemstone) => (

@@ -11,17 +11,13 @@ const Product = ({ data, id }) => {
     setIsWishlisted(!isWishlisted);
   };
 
-  const handleProductClick = () => {
-    navigate("/products/" + 123);
-  };
-
   return (
     <div className={styles.productCard}>
       <div className={styles.thumbnail}>
         <img
           src={data.image_urls[0]}
           alt={data.product_name}
-          onClick={handleProductClick}
+          onClick={() => navigate("/products/" + data._id)}
         />
         <button className={styles.wishlistButton} onClick={toggleWishlist}>
           {isWishlisted ? <FaHeart /> : <FaRegHeart />}
