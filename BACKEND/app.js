@@ -3,8 +3,9 @@ const app = express();
 const cors = require("cors");
 const path = require("path");
 require("dotenv").config();
-const isLoggedIn = require("./middlewares/isLoggedIn");
+const connectDB = require("./config/db");
 
+const isLoggedIn = require("./middlewares/isLoggedIn");
 const productRoute = require("./routes/product.route");
 const userRoute = require("./routes/user.route");
 const orderRoute = require("./routes/order.route");
@@ -14,7 +15,8 @@ const cproductRoute = require("./routes/cproduct.route");
 const cproductorderRoute = require("./routes/cproduct-order.route");
 const gemstoneRoute = require("./routes/gemstone.route");
 const authRoute = require("./routes/auth.router");
-const connectDB = require("./config/db");
+const paymentRoute = require("./routes/payment.route");
+
 /* Middlewares*/
 app.use(cors());
 app.use(express.json());
@@ -30,6 +32,7 @@ app.use("/api/cproduct-order", isLoggedIn, cproductorderRoute);
 app.use("/api/gemstone", gemstoneRoute);
 app.use("/api/users", userRoute);
 app.use("/api/orders", isLoggedIn, orderRoute);
+app.use("/api/payments", paymentRoute);
 app.use("/api/cart", cartRoute);
 app.use("/api/wishlist", wishlistRoute);
 

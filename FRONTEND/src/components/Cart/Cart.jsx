@@ -8,7 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import "./Cart.scss";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const loadScript = (src) => {
   return new Promise((resolve) => {
@@ -58,7 +58,7 @@ const Cart = () => {
 
   const handlePayment = async () => {
     if (userInfo == null) {
-      console.log("jdasmgbkwajghdcbsjh");
+      console.log("User not logged in");
       navigate("/login");
       return;
     }
@@ -92,7 +92,7 @@ const Cart = () => {
         currency: response.data.currency,
         amount: totalAmount * 100,
         order_id: response.data.id,
-        name: "Akshitara",
+        name: "DJC",
         description: "Test Transaction",
         image: "https://your-company-logo.png",
         handler: async function (response) {
@@ -116,15 +116,42 @@ const Cart = () => {
             if (verifyResponse.data.success) {
               setPaymentStatus("success");
               setCartItems([]);
-              toast.success("Payment Successful! Thank you for your purchase.");
+              toast.success("Payment Successful! Thank you for your purchase.", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
             } else {
               setPaymentStatus("failure");
-              toast.error("Payment Failed! Please try again.");
+              toast.error("Payment Failed! Please try again.", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              });
             }
           } catch (err) {
             console.log(err);
             setPaymentStatus("failure");
-            toast.error("Payment Failed! Please try again.");
+            toast.error("Payment Failed! Please try again.", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+          } finally {
+            // Ensure toast is shown regardless of the outcome
+            toast.clearWaitingQueue();
           }
         },
       };
@@ -134,13 +161,21 @@ const Cart = () => {
     } catch (err) {
       console.log(err);
       setPaymentStatus("failure");
-      toast.error("Payment Failed! Please try again.");
+      toast.error("Payment Failed! Please try again.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
 
   return (
     <div className="cart-panel">
-      <ToastContainer containerId="payment" />
+      <ToastContainer />
       <div className="opac-layer" onClick={() => setShowCart(false)}></div>
       <div className="cart-content">
         <div className="cart-header">
