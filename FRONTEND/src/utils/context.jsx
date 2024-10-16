@@ -11,6 +11,8 @@ const AppContext = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [cartCount, setCartCount] = useState(0);
   const [cartSubTotal, setCartSubTotal] = useState(0);
+  const [selectedGem, setSelectedGem] = useState(null);
+  const [selectedSetting, setSelectedSetting] = useState(null);
   const location = useLocation();
 
   useEffect(() => {
@@ -74,6 +76,10 @@ const AppContext = ({ children }) => {
         setShowCart,
         handleCartProductQuantity,
         cartSubTotal,
+        selectedGem,
+        setSelectedGem,
+        selectedSetting,
+        setSelectedSetting,
       }}
     >
       {children}

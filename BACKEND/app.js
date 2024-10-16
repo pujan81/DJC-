@@ -29,7 +29,7 @@ app.use("/api/auth", authRoute);
 app.use("/api/products", productRoute);
 app.use("/api/cproducts", cproductRoute);
 app.use("/api/cproduct-order", isLoggedIn, cproductorderRoute);
-app.use("/api/gemstone", gemstoneRoute);
+app.use("/api/gemstones", gemstoneRoute);
 app.use("/api/users", userRoute);
 app.use("/api/orders", isLoggedIn, orderRoute);
 app.use("/api/payments", paymentRoute);

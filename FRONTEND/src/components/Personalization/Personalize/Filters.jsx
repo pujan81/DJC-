@@ -19,9 +19,11 @@ const Filters = ({ onFilterChange }) => {
 
         <select id="category-filter" onChange={handleFilterChange("category")}>
           <option value="">CATEGORY</option>
-          <option value="gold">Gold</option>
-          <option value="silver">Silver</option>
-          <option value="platinum">Platinum</option>
+          <option value="necklace">Necklace</option>
+          <option value="ring">Ring</option>
+          <option value="earrings">Earrings</option>
+          <option value="bracelet">Bracelet</option>
+          <option value="pendant">Pendant</option>
         </select>
 
         <select id="material-filter" onChange={handleFilterChange("material")}>

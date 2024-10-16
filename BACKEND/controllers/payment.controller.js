@@ -1,6 +1,7 @@
 const razorpay = require("../config/razorpay");
 const Product = require("../models/product.model"); // Assuming you have a Product model
 const Payment = require("../models/payment.model"); // Import the Payment model
+const OrderItem = require("../models/orderItem.model"); // Import the OrderItem model
 const crypto = require("crypto");
 
 exports.createOrder = async (req, res) => {
@@ -78,6 +79,19 @@ exports.verifyPayment = async (req, res) => {
 
       await payment.save();
 
+      // Save details of every product in OrderItem
+      for (const item of cartItems) {
+        const product = products.find((p) => p._id.toString() === item._id);
+        const orderItem = new OrderItem({
+          order_id: payment._id,
+          product_id: item._id,
+          product_name: product.product_name,
+          product_price: product.price,
+          quantity: item.quantity,
+        });
+        await orderItem.save();
+      }
+
       res.json({ success: true, message: "Payment verified successfully" });
     } catch (error) {
       res
@@ -113,6 +127,19 @@ exports.verifyPayment = async (req, res) => {
       });
 
       await payment.save();
+
+      // Save details of every product in OrderItem
+      for (const item of cartItems) {
+        const product = products.find((p) => p._id.toString() === item._id);
+        const orderItem = new OrderItem({
+          order_id: payment._id,
+          product_id: item._id,
+          product_name: product.product_name,
+          product_price: product.price,
+          quantity: item.quantity,
+        });
+        await orderItem.save();
+      }
 
       res
         .status(400)

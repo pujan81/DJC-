@@ -18,6 +18,7 @@
     padding: 25px;
     position: relative;
     justify-content: space-between;
+    color: white;
 }
 
 .step:not(:last-child)::after {

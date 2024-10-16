@@ -58,7 +58,7 @@ const DiamondFunnel = ({ selectedGem, onRemoveGem, selectedSetting, onRemoveSett
             <>
               <span className={styles.checkmark}>✓</span>
               <div className={styles.selection}>
-                <span>{diamond.name}</span>
+                <span>{diamond.product_name}</span>
                 <div>
                   <span>${diamond.price.toLocaleString()}</span>
                   <button className={styles.viewButton}>View</button>
@@ -71,7 +71,7 @@ const DiamondFunnel = ({ selectedGem, onRemoveGem, selectedSetting, onRemoveSett
                 </div>
               </div>
               <img
-                src={diamond.image}
+                src={diamond.image_url}
                 className={styles.itemImage}
                 alt={diamond.name}
               />
@@ -92,7 +92,7 @@ const DiamondFunnel = ({ selectedGem, onRemoveGem, selectedSetting, onRemoveSett
             <>
               <span className={styles.checkmark}>✓</span>
               <div className={styles.selection}>
-                <span>{setting.name}</span>
+                <span>{setting.product_name}</span>
                 <div>
                   <span>${setting.price.toLocaleString()}</span>
                   <button className={styles.viewButton}>View</button>
@@ -105,7 +105,7 @@ const DiamondFunnel = ({ selectedGem, onRemoveGem, selectedSetting, onRemoveSett
                 </div>
               </div>
               <img
-                src={setting.image}
+                src={setting.image_urls[0]}
                 className={styles.itemImage}
                 alt={setting.name}
               />

@@ -5,6 +5,7 @@ import ProductModal from "./ProductModal";
 
 const Products = ({ products, onProductSelect, productType }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
+  console.log(products);
 
   const handleProductClick = (product) => {
     setSelectedProduct(product);
@@ -19,19 +20,20 @@ const Products = ({ products, onProductSelect, productType }) => {
       <div className={styles.products}>
         {products.map((item) => (
           <Product
-            key={item.name}  // Use name or another unique key as _id is not present in sample data
-            id={item.name} 
+            key={item._id}
+            id={item._id}
             data={item}
             onClick={handleProductClick}
+            productType={productType}
           />
         ))}
       </div>
 
       {selectedProduct && (
-        <ProductModal 
-          data={selectedProduct} 
-          onClose={closeModal} 
-          onSelectDiamond={onProductSelect} 
+        <ProductModal
+          data={selectedProduct}
+          onClose={closeModal}
+          onSelectDiamond={onProductSelect}
           productType={productType}
         />
       )}

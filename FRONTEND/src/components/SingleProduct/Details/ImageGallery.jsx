@@ -1,13 +1,17 @@
 // ImageGallery.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styles from "./ImageGallery.module.css";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { FaWandMagicSparkles } from "react-icons/fa6";
+import { Context } from "../../../utils/context";
+import { useNavigate } from "react-router-dom";
 
 const ImageGallery = ({ data }) => {
   const [mainImage, setMainImage] = useState(0);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
+  const { setSelectedSetting } = useContext(Context);
+  const navigate = useNavigate();
   // const images = [
   //   "https://blingbox.in/cdn/shop/products/antique-square-tassel-earrings-bling-box-jewellery-30558003364028.jpg?v=1661331072&width=1080",
   //   "https://www.voylla.com/cdn/shop/products/PRBOM20048_CS.jpg?v=1692788246",
@@ -30,6 +34,11 @@ const ImageGallery = ({ data }) => {
     setShowNotification(true);
   };
 
+  const personalizeProduct = () => {
+    setSelectedSetting(data);
+    navigate("/personalize");
+  };
+
   return (
     <div className={styles.gallery}>
       <div className={styles.mainImage}>
@@ -37,7 +46,7 @@ const ImageGallery = ({ data }) => {
         <button className={styles.wishlistButtonr} onClick={toggleWishlist}>
           {isWishlisted ? <FaHeart /> : <FaRegHeart />}
         </button>
-        <button className={styles.wishlistButtonl}>
+        <button className={styles.wishlistButtonl} onClick={personalizeProduct}>
           <FaWandMagicSparkles />
         </button>
       </div>

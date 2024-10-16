@@ -1,4 +1,10 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  useEffect,
+  useContext,
+} from "react";
 import ImageGallery from "./Personalize/ImageGallery";
 import ProductInfo from "./Personalize/ProductInfo";
 import styles from "./PersonalizedPage1.module.css";
@@ -7,246 +13,60 @@ import Products from "./Personalize/Products";
 import GemstoneFilter from "./Personalize/GemstoneFilter";
 import Filters from "./Personalize/Filters";
 import Propose from "./UploadImage/Propose";
-import { useNavigate } from "react-router-dom";
-
-const initialGems = [
-  {
-    name: "The Murli Diamond Gold Ring",
-    price: 10000,
-    metal: "Gold",
-    material: "Diamond",
-    carat: 1.5,
-    gender: "unisex",
-    image: "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
-    isBestseller: true,
-  },
-  {
-    name: "The Royal Emerald Necklace",
-    price: 500000,
-    metal: "Gold",
-    material: "Emerald",
-    carat: 2.0,
-    gender: "female",
-    image: "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
-  },
-  {
-    name: "The Classic Ruby Earrings",
-    price: 75000,
-    metal: "Gold",
-    material: "Ruby",
-    carat: 1.2,
-    gender: "female",
-    image: "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
-    isBestseller: false,
-  },
-  {
-    name: "The Sapphire Solitaire Ring",
-    price: 30000,
-    metal: "Platinum",
-    material: "Sapphire",
-    carat: 1.8,
-    gender: "unisex",
-    image: "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
-  },
-  {
-    name: "The Elegant Topaz Bracelet",
-    price: 400000,
-    metal: "Gold",
-    material: "Diamond",
-    carat: 2.5,
-    gender: "female",
-    image: "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
-    isBestseller: true,
-  },
-  {
-    name: "The Classic Pearl Necklace",
-    price: 60000,
-    metal: "Silver",
-    material: "Diamond",
-    carat: 2.0,
-    gender: "female",
-    image: "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
-  },
-  {
-    name: "The Amethyst Gold Pendant",
-    price: 20000,
-    metal: "Gold",
-    material: "Ruby",
-    carat: 1.7,
-    gender: "unisex",
-    image: "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
-  },
-  {
-    name: "The Citrine Diamond Ring",
-    price: 45000,
-    metal: "Gold",
-    material: "Emerald",
-    carat: 1.4,
-    gender: "female",
-    image: "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
-  },
-  {
-    name: "The Ruby Gold Bangle",
-    price: 80000,
-    metal: "Gold",
-    material: "Ruby",
-    carat: 2.3,
-    gender: "female",
-    image: "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
-  },
-  {
-    name: "The Elegant Opal Earrings",
-    price: 350000,
-    metal: "Gold",
-    material: "Sapphire",
-    carat: 1.9,
-    gender: "female",
-    image: "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
-  },
-  {
-    name: "The Luxurious Garnet Necklace",
-    price: 90000,
-    metal: "Gold",
-    material: "Ruby",
-    carat: 2.6,
-    gender: "female",
-    image: "https://i.pinimg.com/736x/e3/a6/ea/e3a6ea97f338150c3a0ec599c5b371b8.jpg",
-    isBestseller: true,
-  },
-];
-
-const initialSettings = [
-  {
-    name: "The Murli Diamond Gold Ring",
-    price: 10000,
-    metal: "Gold",
-    material: "Diamond",
-    carat: 1.5,
-    gender: "unisex",
-    image: "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
-    isBestseller: true,
-  },
-  {
-    name: "The Royal Emerald Necklace",
-    price: 500000,
-    metal: "Gold",
-    material: "Emerald",
-    carat: 2.0,
-    gender: "female",
-    image: "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
-  },
-  {
-    name: "The Classic Ruby Earrings",
-    price: 75000,
-    metal: "Gold",
-    material: "Ruby",
-    carat: 1.2,
-    gender: "female",
-    image: "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
-    isBestseller: false,
-  },
-  {
-    name: "The Sapphire Solitaire Ring",
-    price: 30000,
-    metal: "Platinum",
-    material: "Sapphire",
-    carat: 1.8,
-    gender: "unisex",
-    image: "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
-  },
-  {
-    name: "The Elegant Topaz Bracelet",
-    price: 400000,
-    metal: "Gold",
-    material: "Diamond",
-    carat: 2.5,
-    gender: "female",
-    image: "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
-    isBestseller: true,
-  },
-  {
-    name: "The Classic Pearl Necklace",
-    price: 60000,
-    metal: "Silver",
-    material: "Diamond",
-    carat: 2.0,
-    gender: "female",
-    image: "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
-  },
-  {
-    name: "The Amethyst Gold Pendant",
-    price: 20000,
-    metal: "Gold",
-    material: "Ruby",
-    carat: 1.7,
-    gender: "unisex",
-    image: "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
-  },
-  {
-    name: "The Citrine Diamond Ring",
-    price: 45000,
-    metal: "Gold",
-    material: "Emerald",
-    carat: 1.4,
-    gender: "female",
-    image: "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
-  },
-  {
-    name: "The Ruby Gold Bangle",
-    price: 80000,
-    metal: "Gold",
-    material: "Ruby",
-    carat: 2.3,
-    gender: "female",
-    image: "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
-  },
-  {
-    name: "The Elegant Opal Earrings",
-    price: 350000,
-    metal: "Gold",
-    material: "Sapphire",
-    carat: 1.9,
-    gender: "female",
-    image: "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
-  },
-  {
-    name: "The Luxurious Garnet Necklace",
-    price: 90000,
-    metal: "Gold",
-    material: "Ruby",
-    carat: 2.6,
-    gender: "female",
-    image: "https://img.pikbest.com/ai/illus_our/20230529/70ac483d138e0e73cd675ac6fa1b5f78.jpg!w700wp",
-    isBestseller: true,
-  },
-];
+import { useLocation, useNavigate } from "react-router-dom";
+import { Context } from "../../utils/context";
 
 const filterGems = (gems, filters) => {
   return gems.filter((gem) => {
-    const matchesGemstone = !filters.selectedGemstone || gem.material === filters.selectedGemstone;
-    const matchesPrice = gem.price >= filters.minPrice;
-    const matchesCarat = !filters.minCarat || gem.carat >= filters.minCarat;
+    const matchesGemstone =
+      !filters.selectedGemstone ||
+      gem.gemstoneCategory === filters.selectedGemstone;
+    const matchesPrice =
+      filters.minPrice === undefined || gem.price >= filters.minPrice;
+    const matchesCarat =
+      filters.minCarat === undefined || gem.carat >= filters.minCarat;
     return matchesGemstone && matchesPrice && matchesCarat;
   });
 };
 
-const PersonalizedPage1 = ({ checkPageOne }) => {
+const PersonalizedPage1 = ({ checkPageOne, initialGems, initialSettings }) => {
+  const { selectedGem, setSelectedGem, selectedSetting, setSelectedSetting } =
+    useContext(Context);
   const [filteredGems, setFilteredGems] = useState(initialGems);
-  const [selectedGem, setSelectedGem] = useState(null);
   const [filteredSettings, setFilteredSettings] = useState(initialSettings);
   const [appliedFilters, setAppliedFilters] = useState({});
-  const [selectedSetting, setSelectedSetting] = useState(null);
   const [chooseGem, setChooseGem] = useState(true);
   const [isPageOne, setIsPageOne] = useState(checkPageOne);
+  const location = useLocation(); // Add this line
   const navigate = useNavigate();
 
-  const handleApplyFilters = useCallback((filters) => {
-    setFilteredGems(filterGems(initialGems, filters));
-  }, []);
+  useEffect(() => {
+    const personalizationPaths = ["/personalize", "/uploadIdea"];
+
+    if (!personalizationPaths.includes(location.pathname)) {
+      // console.log("Leaving personalization flow, resetting selections");
+      setSelectedGem(null);
+      setSelectedSetting(null);
+    } else {
+      // console.log("Within personalization flow, maintaining selections");
+    }
+  }, [location, setSelectedGem, setSelectedSetting]);
+
+  useEffect(() => {
+    setFilteredGems(initialGems);
+  }, [initialGems]);
+
+  const handleApplyFilters = useCallback(
+    (filters) => {
+      setFilteredGems(filterGems(initialGems, filters));
+    },
+    [initialGems]
+  );
 
   const handleResetFilters = useCallback(() => {
     setFilteredGems(initialGems);
-  }, []);
+    setAppliedFilters({});
+  }, [initialGems]);
 
   const handleGemSelect = useCallback((gem) => {
     setSelectedGem(gem);
@@ -279,12 +99,13 @@ const PersonalizedPage1 = ({ checkPageOne }) => {
   const handleChooseGem = useCallback(() => {
     setChooseGem(true);
     setAppliedFilters({});
-  }, []);
+    setFilteredGems(initialGems); // Reset to initial gems when switching to gem selection
+  }, [initialGems]);
 
   const handleChooseSetting = useCallback(() => {
     setChooseGem(false);
     setFilteredGems(initialGems);
-  }, []);
+  }, [initialGems]);
 
   const handlePage1 = useCallback(() => {
     setIsPageOne(true);
@@ -303,19 +124,28 @@ const PersonalizedPage1 = ({ checkPageOne }) => {
           if (value === "under-100" && product.price > 100) return false;
           if (value === "under-500" && product.price > 500) return false;
           if (value === "under-1000" && product.price > 1000) return false;
-        } else if (filter === "category" && product.metal.toLowerCase() !== value.toLowerCase()) {
+        } else if (
+          filter === "category" &&
+          product.category.toLowerCase() !== value.toLowerCase()
+        ) {
           return false;
-        } else if (filter === "material" && product.material.toLowerCase() !== value.toLowerCase()) {
+        } else if (
+          filter === "material" &&
+          product.material.toLowerCase() !== value.toLowerCase()
+        ) {
           return false;
-        } else if (filter === "gender" && product.gender.toLowerCase() !== value.toLowerCase()) {
+        } else if (
+          filter === "gender" &&
+          product.gender.toLowerCase() !== value.toLowerCase()
+        ) {
           return false;
         }
       }
       return true;
     });
-  }, [appliedFilters]);
+  }, [appliedFilters, initialSettings]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setFilteredSettings(memoizedFilteredSettings);
   }, [memoizedFilteredSettings]);
 
@@ -348,7 +178,7 @@ const PersonalizedPage1 = ({ checkPageOne }) => {
               />
             </div>
             <div className={styles.rightColumn}>
-            <ProductInfo
+              <ProductInfo
                 selectedGem={selectedGem}
                 selectedSetting={selectedSetting}
               />

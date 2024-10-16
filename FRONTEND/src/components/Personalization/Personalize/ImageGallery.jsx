@@ -12,12 +12,12 @@ const ImageGallery = ({ selectedGem, selectedSetting }) => {
       <div className={styles.mainImage}>
         <img
           className={styles.main}
-          src={selectedSetting == null ? mainImage : selectedSetting.image}
+          src={selectedSetting == null ? mainImage : selectedSetting.image_urls[0]}
           alt="Product"
         />
         <img
           className={styles.gem}
-          src={selectedGem == null ? gemImage : selectedGem.image}
+          src={selectedGem == null ? gemImage : selectedGem.image_url}
           alt="Gem"
         />
       </div>

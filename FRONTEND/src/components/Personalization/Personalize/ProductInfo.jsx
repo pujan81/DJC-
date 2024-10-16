@@ -1,8 +1,35 @@
-// ProductInfo.jsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./ProductInfo.module.css";
+import OrderFormPopup from "./OrderFormPopup"; // New component
+import { useNavigate } from "react-router-dom";
 
 const ProductInfo = ({ selectedGem, selectedSetting }) => {
+  const [showOrderForm, setShowOrderForm] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("user-info"));
+    if (userData) {
+      setUserInfo(userData);
+    }
+  }, []);
+
+  const handleBuyNow = () => {
+    if (userInfo == null) {
+      navigate("/login");
+      return;
+    }
+    window.scrollTo({ top: 100, behavior: "smooth" });
+    if (selectedGem && selectedSetting) {
+      setShowOrderForm(true); // Show the order form
+    }
+  };
+
+  const handleClosePopup = () => {
+    setShowOrderForm(false);
+  };
+
   const calculateTotal = () => {
     if (selectedGem && selectedSetting) {
       return selectedGem.price + selectedSetting.price;
@@ -10,20 +37,26 @@ const ProductInfo = ({ selectedGem, selectedSetting }) => {
     return null;
   };
 
+  const sizeList = selectedSetting?.size_list || [];
+
   return (
     <div className={styles.productInfo}>
       <h1 className={styles.title}>
-        {selectedGem == null ? "Select a Gemstone" : selectedGem.name} +
+        {selectedGem == null ? "Select a Gemstone" : selectedGem.product_name} +
         {selectedSetting == null
           ? " Select a Setting"
-          : " " + selectedSetting.name}
+          : " " + selectedSetting.product_name}
       </h1>
       <p className={styles.type}>Personalized Product</p>
       <div className={styles.pricing}>
         <span className={styles.price}>
           {!selectedGem || !selectedSetting
             ? "No price available"
-            : "₹" + selectedGem.price.toLocaleString() + " + " + "₹" + selectedSetting.price.toLocaleString()}
+            : "₹" +
+              selectedGem.price.toLocaleString() +
+              " + " +
+              "₹" +
+              selectedSetting.price.toLocaleString()}
         </span>
         {selectedGem && selectedSetting && (
           <span className={styles.price}>
@@ -36,16 +69,27 @@ const ProductInfo = ({ selectedGem, selectedSetting }) => {
       <div className={styles.size}>
         <label htmlFor="size">SIZE:</label>
         <select id="size">
-          <option>Select Size</option>
-          <option>Select Size</option>
-          <option>Select Size</option>
-          <option>Select Size</option>
+          <option value="">Select Size</option>
+          {sizeList.map((size, index) => (
+            <option key={index} value={size}>
+              {size}
+            </option>
+          ))}
         </select>
       </div>
       <div className={styles.actions}>
-        <button className={styles.button50}>ADD TO CART</button>
-        <button className={styles.button51}>BUY NOW</button>
+        <button className={styles.button50} onClick={handleBuyNow}>
+          Contact Us
+        </button>
       </div>
+      {showOrderForm && (
+        <OrderFormPopup
+          selectedGem={selectedGem}
+          selectedSetting={selectedSetting}
+          onClose={handleClosePopup}
+          userInfo={userInfo}
+        />
+      )}
     </div>
   );
 };
