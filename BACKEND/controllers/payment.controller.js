@@ -1,7 +1,6 @@
 const razorpay = require("../config/razorpay");
 const Product = require("../models/product.model"); // Assuming you have a Product model
 const Payment = require("../models/payment.model"); // Import the Payment model
-const OrderItem = require("../models/orderItem.model"); // Import the OrderItem model
 const crypto = require("crypto");
 
 exports.createOrder = async (req, res) => {
@@ -18,8 +17,8 @@ exports.createOrder = async (req, res) => {
 
     const options = {
       amount: totalAmount * 100, // amount in the smallest currency unit
-      currency: "INR",
-      receipt: "order_rcptid_11",
+      currency: 'INR',
+      receipt: 'order_rcptid_11',
     };
 
     const order = await razorpay.orders.create(options);
@@ -43,11 +42,11 @@ exports.verifyPayment = async (req, res) => {
     phone_number, // New fields added
   } = req.body;
 
-  const razorpayKeySecret = "C8HOS1oqNPl9gms8WxKXnGVK"; // Replace with your actual Razorpay key secret
+  const razorpayKeySecret = 'C8HOS1oqNPl9gms8WxKXnGVK'; // Replace with your actual Razorpay key secret
 
-  const hmac = crypto.createHmac("sha256", razorpayKeySecret);
-  hmac.update(razorpay_order_id + "|" + razorpay_payment_id);
-  const generatedSignature = hmac.digest("hex");
+  const hmac = crypto.createHmac('sha256', razorpayKeySecret);
+  hmac.update(razorpay_order_id + '|' + razorpay_payment_id);
+  const generatedSignature = hmac.digest('hex');
 
   if (generatedSignature === razorpay_signature) {
     try {
@@ -73,8 +72,8 @@ exports.verifyPayment = async (req, res) => {
         razorpay_payment_id,
         razorpay_signature,
         amount,
-        status: "success",
-        delivery_status: "pending",
+        status: 'success',
+        delivery_status: 'pending',
       });
 
       await payment.save();
@@ -92,11 +91,24 @@ exports.verifyPayment = async (req, res) => {
         await orderItem.save();
       }
 
-      res.json({ success: true, message: "Payment verified successfully" });
+      // Save details of every product in OrderItem
+      for (const item of cartItems) {
+        const product = products.find((p) => p._id.toString() === item._id);
+        const orderItem = new OrderItem({
+          order_id: payment._id,
+          product_id: item._id,
+          product_name: product.product_name,
+          product_price: product.price,
+          quantity: item.quantity,
+        });
+        await orderItem.save();
+      }
+
+      res.json({ success: true, message: 'Payment verified successfully' });
     } catch (error) {
       res
         .status(500)
-        .json({ success: false, message: "Error saving payment details" });
+        .json({ success: false, message: 'Error saving payment details' });
     }
   } else {
     // Payment failed
@@ -123,7 +135,7 @@ exports.verifyPayment = async (req, res) => {
         razorpay_payment_id,
         razorpay_signature,
         amount,
-        status: "failure",
+        status: 'failure',
       });
 
       await payment.save();
@@ -143,11 +155,11 @@ exports.verifyPayment = async (req, res) => {
 
       res
         .status(400)
-        .json({ success: false, message: "Payment verification failed" });
+        .json({ success: false, message: 'Payment verification failed' });
     } catch (error) {
       res
         .status(500)
-        .json({ success: false, message: "Error saving payment details" });
+        .json({ success: false, message: 'Error saving payment details' });
     }
   }
 };
