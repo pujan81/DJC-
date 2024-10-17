@@ -81,7 +81,7 @@ const Cart = () => {
       const response = await makePaymentRequest.post(
         "/api/payments/create-order",
         { productIds, quantities }
-      );
+      );  
 
       const totalAmount = cartItems.reduce((total, item) => {
         return total + item.price * item.quantity;
@@ -90,7 +90,7 @@ const Cart = () => {
       const options = {
         key: "rzp_test_JcAqSFto3yK5sf",
         currency: response.data.currency,
-        amount: totalAmount * 100,
+        amount: response.data.amount * 100,
         order_id: response.data.id,
         name: "DJC",
         description: "Test Transaction",

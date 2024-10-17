@@ -4,7 +4,7 @@ const cors = require("cors");
 const path = require("path");
 require("dotenv").config();
 const connectDB = require("./config/db");
-
+const formRoutes = require('./routes/proposeIdea.route');
 const isLoggedIn = require("./middlewares/isLoggedIn");
 const productRoute = require("./routes/product.route");
 const userRoute = require("./routes/user.route");
@@ -35,6 +35,9 @@ app.use("/api/orders", isLoggedIn, orderRoute);
 app.use("/api/payments", paymentRoute);
 app.use("/api/cart", cartRoute);
 app.use("/api/wishlist", wishlistRoute);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/api/proposeIdea', formRoutes);
+
 
 connectDB();
 

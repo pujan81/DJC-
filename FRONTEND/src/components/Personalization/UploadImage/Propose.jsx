@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import styles from "./Propose.module.css";
+import axios from 'axios';
 
 const PersonalizePage = () => {
   const [images, setImages] = useState([]);
@@ -7,6 +8,7 @@ const PersonalizePage = () => {
   const [budget, setBudget] = useState("");
   const [size, setSize] = useState("");
   const [details, setDetails] = useState("");
+  const [message, setMessage] = useState("");
   const fileInputRef = useRef(null);
 
   const handleImageUpload = (files) => {
@@ -28,9 +30,43 @@ const PersonalizePage = () => {
     setImages(images.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log({ images, number, budget, size, details });
+
+    const userInfo = JSON.parse(localStorage.getItem('user-info'));
+    const userId = userInfo?.user_id;
+    const userName = userInfo?.name;
+
+
+    const formData = new FormData();
+    formData.append('number', number);
+    formData.append('budget', budget);
+    formData.append('size', size);
+    formData.append('details', details);
+    formData.append('userId', userId);
+    formData.append('userName', userName);
+
+    images.forEach((image, index) => {
+      formData.append('images', image);
+    });
+
+    try {
+      const response = await axios.post('http://localhost:3000/api/proposeIdea/submit-form', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      setMessage("Your request has been submitted successfully!");
+      // Optionally, you can clear the form fields after submission
+      setImages([]);
+      setNumber("");
+      setBudget("");
+      setSize("");
+      setDetails("");
+    } catch (error) {
+      setMessage("Error submitting form. Please try again.");
+      console.error('Error submitting form:', error);
+    }
   };
 
   const handleMainImageClick = () => {
@@ -135,6 +171,7 @@ const PersonalizePage = () => {
               Submit
             </button>
           </form>
+          {message && <p className={styles.message}>{message}</p>}
         </div>
       </div>
     </div>

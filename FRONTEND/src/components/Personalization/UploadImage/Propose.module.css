@@ -2,7 +2,11 @@
   width: 80%;
   text-align: center;
 }
-
+.message {
+  color: green; /* Change to red for error messages if needed */
+  font-weight: bold;
+  margin-top: 20px;
+}
 .personalizePage {
   max-width: 1200px;
   padding: 20px;
