@@ -81,7 +81,7 @@ const Cart = () => {
       const response = await makePaymentRequest.post(
         "/api/payments/create-order",
         { productIds, quantities }
-      );  
+      );
 
       const totalAmount = cartItems.reduce((total, item) => {
         return total + item.price * item.quantity;
@@ -110,6 +110,7 @@ const Cart = () => {
                 cartItems,
                 address: address,
                 phone_number: phoneNumber,
+                userEmail: userInfo.email, // Include user's email
               }
             );
 

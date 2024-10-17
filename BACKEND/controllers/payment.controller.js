@@ -3,6 +3,7 @@ const Product = require("../models/product.model"); // Assuming you have a Produ
 const Payment = require("../models/payment.model"); // Import the Payment model
 const OrderItem = require("../models/orderItem.model"); // Import the OrderItem model
 const crypto = require("crypto");
+const { sendOrderConfirmationEmail } = require("../services/emailServices"); // Import the email service
 
 exports.createOrder = async (req, res) => {
   const { productIds, quantities } = req.body;
@@ -41,6 +42,7 @@ exports.verifyPayment = async (req, res) => {
     cartItems,
     address, // New fields added
     phone_number, // New fields added
+    userEmail, // New field added for user's email
   } = req.body;
 
   const razorpayKeySecret = "C8HOS1oqNPl9gms8WxKXnGVK"; // Replace with your actual Razorpay key secret
@@ -91,6 +93,13 @@ exports.verifyPayment = async (req, res) => {
         });
         await orderItem.save();
       }
+
+     // Send order confirmation email
+      await sendOrderConfirmationEmail(userEmail, {
+        order_id: razorpay_order_id,
+        amount,
+        products: productDetails,
+      });
 
       res.json({ success: true, message: "Payment verified successfully" });
     } catch (error) {
