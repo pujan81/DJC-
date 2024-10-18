@@ -1,50 +1,76 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext, useState, useCallback, memo, useRef, useTransition } from "react";
 import PersonalizedPage1 from "../../components/Personalization/PersonalizedPage1";
 import styles from "./Customization_Page.module.css";
 import { fetchDataFromApi } from "../../utils/api";
 import { Context } from "../../utils/context";
 
+const MemoizedPersonalizedPage1 = memo(PersonalizedPage1, (prev, next) => {
+  return (
+    prev.checkPageOne === next.checkPageOne &&
+    JSON.stringify(prev.initialGems) === JSON.stringify(next.initialGems) &&
+    JSON.stringify(prev.initialSettings) === JSON.stringify(next.initialSettings)
+  );
+});
+
 function Personalize_Page({ checkPageOne }) {
+  const [isPending, startTransition] = useTransition();
   const [gemstones, setGemstones] = useState([]);
   const { products, setProducts } = useContext(Context);
+  const [isLoading, setIsLoading] = useState(true);
+  const isMounted = useRef(false);
 
+  // Batch update function
+  const batchUpdateData = useCallback((gemstonesData, productsData) => {
+    startTransition(() => {
+      if (JSON.stringify(gemstones) !== JSON.stringify(gemstonesData)) {
+        setGemstones(gemstonesData);
+      }
+      if (JSON.stringify(products) !== JSON.stringify(productsData)) {
+        setProducts(productsData);
+      }
+    });
+  }, [products, gemstones, setProducts]);
+
+  // Single effect for data fetching
   useEffect(() => {
-    const getGemstones = async () => {
+    if (isMounted.current) return;
+    isMounted.current = true;
+
+    const fetchData = async () => {
+      setIsLoading(true);
       try {
-        const res = await fetchDataFromApi("/api/gemstones");
-        // console.log(res);
-        setGemstones(res);
+        const [gemstonesRes, productsRes] = await Promise.all([
+          fetchDataFromApi("/api/gemstones"),
+          fetchDataFromApi("/api/products")
+        ]);
+
+        const finalProducts = productsRes.length > 0 ? productsRes : initialProducts;
+        batchUpdateData(gemstonesRes, finalProducts);
       } catch (error) {
-        setGemstones([]);
+        console.error("Data fetch error:", error);
+        batchUpdateData([], initialProducts);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    getGemstones();
-  }, [setGemstones]);
+    fetchData();
+  }, [batchUpdateData]);
 
-  useEffect(() => {
-    const getProducts = async () => {
-      try {
-        const res = await fetchDataFromApi("/api/products");
-        // console.log(res);
-        setProducts(res.length > 0 ? res : initialProducts);
-      } catch (error) {
-        setProducts(initialProducts);
-      }
-    };
+  // Memoize props
+  const personalizedPageProps = React.useMemo(() => ({
+    checkPageOne,
+    initialGems: gemstones,
+    initialSettings: products
+  }), [checkPageOne, gemstones, products]);
 
-    getProducts();
-  }, [setProducts]);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-  return (
-    <>
-      <PersonalizedPage1
-        checkPageOne={checkPageOne}
-        initialGems={gemstones}
-        initialSettings={products}
-      />
-    </>
-  );
+  // console.log("Customisedpage Rendering");
+  
+  return <MemoizedPersonalizedPage1 {...personalizedPageProps} />;
 }
 
-export default Personalize_Page;
+export default memo(Personalize_Page);
