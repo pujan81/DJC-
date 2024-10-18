@@ -37,18 +37,15 @@ const PersonalizedPage1 = ({ checkPageOne, initialGems, initialSettings }) => {
   const [appliedFilters, setAppliedFilters] = useState({});
   const [chooseGem, setChooseGem] = useState(true);
   const [isPageOne, setIsPageOne] = useState(checkPageOne);
-  const location = useLocation(); // Add this line
+  const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
     const personalizationPaths = ["/personalize", "/uploadIdea"];
 
     if (!personalizationPaths.includes(location.pathname)) {
-      // console.log("Leaving personalization flow, resetting selections");
       setSelectedGem(null);
       setSelectedSetting(null);
-    } else {
-      // console.log("Within personalization flow, maintaining selections");
     }
   }, [location, setSelectedGem, setSelectedSetting]);
 
@@ -149,6 +146,7 @@ const PersonalizedPage1 = ({ checkPageOne, initialGems, initialSettings }) => {
     setFilteredSettings(memoizedFilteredSettings);
   }, [memoizedFilteredSettings]);
 
+
   return (
     <div className={styles.Personalized}>
       <div className={styles.title}>
@@ -215,4 +213,4 @@ const PersonalizedPage1 = ({ checkPageOne, initialGems, initialSettings }) => {
   );
 };
 
-export default PersonalizedPage1;
+export default React.memo(PersonalizedPage1);

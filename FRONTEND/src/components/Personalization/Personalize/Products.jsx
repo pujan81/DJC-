@@ -1,19 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import styles from "./Products.module.css";
 import Product from "./Product";
 import ProductModal from "./ProductModal";
 
-const Products = ({ products, onProductSelect, productType }) => {
+const Products = React.memo(({ products, onProductSelect, productType }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
-  // console.log(products);
 
-  const handleProductClick = (product) => {
+  const handleProductClick = useCallback((product) => {
     setSelectedProduct(product);
-  };
+  }, []);
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setSelectedProduct(null);
-  };
+  }, []);
+
 
   return (
     <div className={styles.productsContainer}>
@@ -39,6 +39,6 @@ const Products = ({ products, onProductSelect, productType }) => {
       )}
     </div>
   );
-};
+});
 
 export default Products;
