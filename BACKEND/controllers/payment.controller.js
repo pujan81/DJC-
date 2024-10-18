@@ -94,12 +94,8 @@ exports.verifyPayment = async (req, res) => {
         await orderItem.save();
       }
 
-     // Send order confirmation email
-      await sendOrderConfirmationEmail(userEmail, {
-        order_id: razorpay_order_id,
-        amount,
-        products: productDetails,
-      });
+      // Send order confirmation email
+      await sendOrderConfirmationEmail(userEmail, req.body);
 
       res.json({ success: true, message: "Payment verified successfully" });
     } catch (error) {

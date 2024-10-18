@@ -1,4 +1,5 @@
 const CProduct = require("../models/cproduct.model");
+const { sendCProductReachedEmail } = require("../services/emailServices");
 
 const getCProductsList = async (req, res) => {
   try {
@@ -22,6 +23,7 @@ const getCProductById = async (req, res) => {
 const addCProduct = async (req, res) => {
   try {
     const createdProduct = await CProduct.create(req.body);
+    await sendCProductReachedEmail(req.body.userEmail, req.body);
     res.status(201).json(createdProduct);
   } catch (err) {
     res.status(500).json({ message: err.message });

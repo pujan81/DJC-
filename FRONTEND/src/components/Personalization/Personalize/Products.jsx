@@ -5,7 +5,7 @@ import ProductModal from "./ProductModal";
 
 const Products = ({ products, onProductSelect, productType }) => {
   const [selectedProduct, setSelectedProduct] = useState(null);
-  console.log(products);
+  // console.log(products);
 
   const handleProductClick = (product) => {
     setSelectedProduct(product);

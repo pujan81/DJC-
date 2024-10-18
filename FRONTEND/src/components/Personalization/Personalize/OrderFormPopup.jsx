@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import styles from "./OrderFormPopup.module.css";
 import { Context } from "../../../utils/context";
+import { postData } from "../../../utils/api";
 
 const OrderFormPopup = ({
   selectedGem,
@@ -20,6 +21,7 @@ const OrderFormPopup = ({
     message: "",
     size: "",
     quantity: 1,
+    userEmail: userInfo.email, // Include user's email
   });
 
   const [errors, setErrors] = useState({});
@@ -59,7 +61,7 @@ const OrderFormPopup = ({
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
       const orderData = {
@@ -67,10 +69,19 @@ const OrderFormPopup = ({
         settingId: selectedSetting._id,
         ...formData,
       };
-      console.log("Order Details:", orderData);
-      setSelectedGem(null);
-      setSelectedSetting(null);
-      onClose();
+      // console.log("Order Details:", orderData);
+
+      try {
+        const result = await postData("/api/cproducts", orderData);
+        // console.log("Order submitted successfully:", result);
+
+        setSelectedGem(null);
+        setSelectedSetting(null);
+
+        onClose();
+      } catch (error) {
+        // console.error("Error submitting order:", error);
+      }
     }
   };
 

@@ -6,14 +6,14 @@ const api = axios.create({
 
 export const googleAuth = (code) => api.get(`/google?code=${code}`);
 
-// Ensure your environment variables are set up correctly
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL; // Your new backend URL
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL; // Your backend URL
 
 // Axios instance for making API requests
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
 });
 
+// Function to fetch data
 export const fetchDataFromApi = async (url) => {
   try {
     const { data } = await axiosInstance.get(url);
@@ -31,6 +31,17 @@ export const updateData = async (url, updatedData) => {
     return data;
   } catch (err) {
     console.error("Error updating data:", err.response || err.message);
+    throw err;
+  }
+};
+
+// Function to post data
+export const postData = async (url, newData) => {
+  try {
+    const { data } = await axiosInstance.post(url, newData);
+    return data;
+  } catch (err) {
+    console.error("Error posting data:", err.response || err.message);
     throw err;
   }
 };
