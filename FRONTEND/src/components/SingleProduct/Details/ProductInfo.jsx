@@ -46,7 +46,7 @@ const ProductInfo = ({ data }) => {
         >
           ADD TO CART
         </button>
-        <button className={styles.button51}>BUY NOW</button>
+        {/* <button className={styles.button51}>BUY NOW</button> */}
       </div>
     </div>
   );

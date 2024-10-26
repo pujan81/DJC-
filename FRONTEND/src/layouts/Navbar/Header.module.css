@@ -161,10 +161,13 @@
   top: calc(100% + 10px);
   right: 50%;
   transform: translateX(50%);
-  background-color: #fff;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  padding: 10px;
-  width: 180px;
+  background: rgba(255, 255, 255, 0.1); /* Glass effect */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 10px 5px;
+  width: 140px;
   z-index: 99;
   opacity: 0;
   visibility: hidden;
@@ -182,7 +185,7 @@
   transform: translateX(50%);
   border-width: 0 10px 10px 10px;
   border-style: solid;
-  border-color: transparent transparent #fff transparent;
+  border-color: transparent transparent rgba(255, 255, 255, 0.1) transparent; /* Glassy arrow */
 }
 
 .userDropdown.active {
@@ -204,15 +207,31 @@
   border-radius: 50%;
   margin-bottom: 15px;
   object-fit: cover;
-  border: 2px solid #f0f0f0;
+  border: 2px solid rgba(255, 255, 255, 0.2); /* Soft border for glassy look */
 }
 
 .userName {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   text-align: center;
-  color: #333;
-  margin-bottom: 10px;
+  color: goldenrod;
+}
+
+.btn-container{
+  display: flex;
+  padding: 10px;
+  gap: 20px;
+}
+
+.ddlbutton{
+  width: 30px;
+  height: 30px;
+  font-size: 40px;
+  color: rgb(255, 255, 255);
+}
+
+.ddlButton:hover{
+  color: white;
 }
 
 .dropdownButton {
@@ -226,13 +245,13 @@
   cursor: pointer;
   font-size: 14px;
   color: white;
-  background: #00970d;
-  border-bottom: 3px solid #006d09;
+  background: goldenrod;
+  border-bottom: 3px solid rgb(156, 113, 5);
   transition: background 0.3s ease;
 }
 
 .dropdownButton:hover {
-  background: #006d09;
+  background: rgb(202, 147, 8);
 }
 
 .dropdownMenu {

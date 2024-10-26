@@ -1,39 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { MdClose } from "react-icons/md";
 import styles from "./Search.module.css";
+import useFetch from "../../../hooks/useFetch";
 import { useNavigate } from "react-router-dom";
 
 const Search = ({ setSearchModal }) => {
   const [query, setQuery] = useState("");
-  const [data, setData] = useState([]);
   const navigate = useNavigate();
 
   const onChange = (e) => {
     setQuery(e.target.value);
   };
 
-  // Fetch data from the public API
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!query) {
-        setData([]);
-        return;
-      }
+  let { data } = useFetch(query ? `/api/products/query/${query}` : null);
 
-      try {
-        const response = await fetch(
-          `https://api.akshitaraayurved.com/api/products/query/${query}`
-        );
-        const result = await response.json();
-        setData(Array.isArray(result) ? result : []);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setData([]);
-      }
-    };
-
-    fetchData();
-  }, [query]);
+  // Ensure data is always an array, or set it to an empty array if not
+  if (!Array.isArray(data)) {
+    data = [];
+  }
 
   return (
     <div className={styles.searchModal}>
@@ -67,12 +51,12 @@ const Search = ({ setSearchModal }) => {
                 className={styles.searchResultItem}
                 key={item._id}
                 onClick={() => {
-                  navigate("/product/" + item._id);
+                  navigate("/products/" + item._id);
                   setSearchModal(false);
                 }}
               >
                 <div className={styles.imageContainer}>
-                  <img src={item.image} alt={item.title} />
+                  <img src={item.image_urls[0]} alt={item.title} />
                 </div>
                 <div className={styles.prodDetails}>
                   <span className={styles.name}>{item.product_name}</span>

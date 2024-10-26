@@ -1,4 +1,5 @@
 import axios from "axios";
+import React, { useState } from "react";
 
 const api = axios.create({
   baseURL: "http://localhost:3000/api/auth",
@@ -26,6 +27,7 @@ export const fetchDataFromApi = async (url) => {
 
 // Function to update data
 export const updateData = async (url, updatedData) => {
+  const user = useUser();
   try {
     const { data } = await axiosInstance.put(url, updatedData);
     return data;
@@ -34,7 +36,6 @@ export const updateData = async (url, updatedData) => {
     throw err;
   }
 };
-
 // Function to post data
 export const postData = async (url, newData) => {
   try {

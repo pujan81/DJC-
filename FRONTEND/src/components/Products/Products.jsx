@@ -27,12 +27,12 @@ const Products = ({ products }) => {
     // Apply all active filters
     for (const [filter, value] of Object.entries(appliedFilters)) {
       if (filter === "price") {
-        if (value === "under-100") {
-          filtered = filtered.filter((product) => product.price <= 100);
-        } else if (value === "under-500") {
-          filtered = filtered.filter((product) => product.price <= 500);
-        } else if (value === "under-1000") {
-          filtered = filtered.filter((product) => product.price <= 1000);
+        if (value === "under-100000") {
+          filtered = filtered.filter((product) => product.price <= 100000);
+        } else if (value === "under-500000") {
+          filtered = filtered.filter((product) => product.price <= 500000);
+        } else if (value === "under-1000000") {
+          filtered = filtered.filter((product) => product.price <= 1000000);
         }
       } else if (filter === "category") {
         filtered = filtered.filter(

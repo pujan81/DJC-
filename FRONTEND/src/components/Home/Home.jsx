@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./home.css";
 import * as THREE from "three";
 import TWEEN from "@tweenjs/tween.js";
@@ -14,17 +14,38 @@ import DiamondRing from "./Diamond_Ring/DiamondRenderer";
 
 const Home = () => {
   const containerRef = useRef(null);
+  const sceneRef = useRef(null);
+  const rendererRef = useRef(null);
+  const composerRef = useRef(null);
+  const cameraRef = useRef(null);
+  const controlsRef = useRef(null);
+  const pointsRef = useRef(null);
+  const animationIdRef = useRef(null);
+  const [isInitialized, setIsInitialized] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const dracoLoader = new DRACOLoader();
-    const loader = new GLTFLoader();
-    dracoLoader.setDecoderPath("https://www.gstatic.com/draco/v1/decoders/");
-    dracoLoader.setDecoderConfig({ type: "js" });
-    loader.setDRACOLoader(dracoLoader);
+    if (!isInitialized) {
+      initScene();
+      setIsInitialized(true);
+    } else {
+      // If already initialized, just restart the render loop
+      if (rendererRef.current && composerRef.current) {
+        renderLoop();
+      }
+    }
 
+    return () => {
+      if (animationIdRef.current) {
+        cancelAnimationFrame(animationIdRef.current);
+      }
+    };
+  }, [isInitialized]);
+
+  const initScene = () => {
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xc0c0c0);
+    scene.background = new THREE.Color(0x000010);
+    sceneRef.current = scene;
 
     const renderer = new THREE.WebGLRenderer({
       antialias: false,
@@ -34,6 +55,7 @@ const Home = () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.outputEncoding = THREE.sRGBEncoding;
     containerRef.current.appendChild(renderer.domElement);
+    rendererRef.current = renderer;
 
     const camera = new THREE.PerspectiveCamera(
       35,
@@ -43,124 +65,142 @@ const Home = () => {
     );
     camera.position.set(34, 16, -20);
     scene.add(camera);
-
-    window.addEventListener("resize", () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
-      composer.setSize(width, height);
-    });
+    cameraRef.current = camera;
 
     const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableRotate = true;
-    controls.enableZoom = false;
-    controls.enablePan = false;
-    controls.minPolarAngle = Math.PI / 2;
-    controls.maxPolarAngle = Math.PI / 2;
+    setupControls(controls);
+    controlsRef.current = controls;
 
-    loader.load("src/assets/diamond.glb", function (gltf) {
+    const composer = new EffectComposer(renderer);
+    composer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    const renderPass = new RenderPass(scene, camera);
+    composer.addPass(renderPass);
+    composerRef.current = composer;
+
+    window.addEventListener("resize", handleResize);
+
+    loadDiamond();
+    introAnimation();
+  };
+
+  const loadDiamond = () => {
+    const dracoLoader = new DRACOLoader();
+    const loader = new GLTFLoader();
+    dracoLoader.setDecoderPath("https://www.gstatic.com/draco/v1/decoders/");
+    dracoLoader.setDecoderConfig({ type: "js" });
+    loader.setDRACOLoader(dracoLoader);
+    console.log("loaded the diamond");
+
+    loader.load("src/assets/diamond.glb", (gltf) => {
+      let sampler;
       gltf.scene.traverse((obj) => {
         if (obj.isMesh) {
           sampler = new MeshSurfaceSampler(obj).build();
         }
       });
-      transformMesh();
+      if (sampler) {
+        createPoints(sampler);
+      }
     });
+  };
 
-    let sampler;
-    let pointsGeometry = new THREE.BufferGeometry();
+  const createPoints = (sampler) => {
+    const pointsGeometry = new THREE.BufferGeometry();
     const vertices = [];
     const tempPosition = new THREE.Vector3();
 
-    function transformMesh() {
-      for (let i = 0; i < 3000; i++) {
-        sampler.sample(tempPosition);
-        vertices.push(tempPosition.x, tempPosition.y, tempPosition.z);
-      }
-
-      pointsGeometry.setAttribute(
-        "position",
-        new THREE.Float32BufferAttribute(vertices, 3)
-      );
-
-      const pointsMaterial = new THREE.PointsMaterial({
-        color: 0x4ee2ec,
-        size: 0.1,
-        blending: THREE.AdditiveBlending,
-        transparent: true,
-        opacity: 0.3,
-        depthWrite: false,
-        sizeAttenuation: true,
-        alphaMap: new THREE.TextureLoader().load(
-          "src/assets/particle-texture.jpg",
-          (texture) => {
-            texture.minFilter = THREE.LinearFilter;
-            texture.generateMipmaps = false;
-          }
-        ),
-      });
-
-      const points = new THREE.Points(pointsGeometry, pointsMaterial);
-      scene.add(points);
+    for (let i = 0; i < 3000; i++) {
+      sampler.sample(tempPosition);
+      vertices.push(tempPosition.x, tempPosition.y, tempPosition.z);
     }
 
-    function introAnimation() {
-      controls.enabled = false;
+    pointsGeometry.setAttribute(
+      "position",
+      new THREE.Float32BufferAttribute(vertices, 3)
+    );
 
-      new TWEEN.Tween(camera.position.set(-1, -0.1, 0))
+    const pointsMaterial = new THREE.PointsMaterial({
+      color: 0x4ee2ec,
+      size: 0.1,
+      blending: THREE.AdditiveBlending,
+      transparent: true,
+      opacity: 0.3,
+      depthWrite: false,
+      sizeAttenuation: true,
+      alphaMap: new THREE.TextureLoader().load(
+        "src/assets/particle-texture.jpg",
+        (texture) => {
+          texture.minFilter = THREE.LinearFilter;
+          texture.generateMipmaps = false;
+        }
+      ),
+    });
+
+    const points = new THREE.Points(pointsGeometry, pointsMaterial);
+    sceneRef.current.add(points);
+    pointsRef.current = points;
+  };
+
+  const setupControls = (controls) => {
+    controls.enableRotate = true;
+    controls.enableZoom = false;
+    controls.enablePan = false;
+    controls.minPolarAngle = Math.PI / 2;
+    controls.maxPolarAngle = Math.PI / 2;
+  };
+
+  const introAnimation = () => {
+    if (controlsRef.current && cameraRef.current) {
+      controlsRef.current.enabled = false;
+      new TWEEN.Tween(cameraRef.current.position.set(-1, -0.1, 0))
         .to({ x: 2, y: -0.9, z: 5 }, 6500)
         .easing(TWEEN.Easing.Quadratic.InOut)
         .start()
-        .onComplete(function () {
-          controls.enabled = true;
+        .onComplete(() => {
+          if (controlsRef.current) {
+            controlsRef.current.enabled = true;
+            setOrbitControlsLimits();
+          }
           const titleElement = document.querySelector(".main--title");
           if (titleElement) {
             titleElement.classList.add("ended");
           }
-          setOrbitControlsLimits();
-          TWEEN.remove(this);
         });
     }
+  };
 
-    introAnimation();
-
-    function setOrbitControlsLimits() {
-      controls.enableDamping = true;
-      controls.dampingFactor = 0.04;
-      controls.minDistance = 0.5;
-      controls.maxDistance = 9;
-      controls.enableRotate = true;
-      controls.autoRotate = true;
+  const setOrbitControlsLimits = () => {
+    if (controlsRef.current) {
+      controlsRef.current.enableDamping = true;
+      controlsRef.current.dampingFactor = 0.04;
+      controlsRef.current.minDistance = 0.5;
+      controlsRef.current.maxDistance = 9;
+      controlsRef.current.enableRotate = true;
+      controlsRef.current.autoRotate = true;
     }
+  };
 
-    const renderPass = new RenderPass(scene, camera);
-    const composer = new EffectComposer(renderer);
-    composer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-    composer.addPass(renderPass);
-
-    scene.background = new THREE.Color(0x000010);
-
-    const clock = new THREE.Clock();
-    function renderLoop() {
-      TWEEN.update();
-      controls.update();
-      composer.render();
-      requestAnimationFrame(renderLoop);
+  const handleResize = () => {
+    if (cameraRef.current && rendererRef.current && composerRef.current) {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      cameraRef.current.aspect = width / height;
+      cameraRef.current.updateProjectionMatrix();
+      rendererRef.current.setSize(width, height);
+      composerRef.current.setSize(width, height);
     }
+  };
 
-    renderLoop();
-
-    return () => {
-      renderer.dispose();
-      pointsGeometry.dispose();
-      if (containerRef.current) {
-        containerRef.current.removeChild(renderer.domElement);
-      }
-      controls.dispose();
-    };
-  }, []);
+  const renderLoop = () => {
+    TWEEN.update();
+    if (controlsRef.current) {
+      controlsRef.current.update();
+    }
+    if (composerRef.current) {
+      composerRef.current.render();
+    }
+    animationIdRef.current = requestAnimationFrame(renderLoop);
+  };
 
   const handleBuyNowClick = () => {
     navigate("/products");
@@ -172,7 +212,7 @@ const Home = () => {
 
   const handleUploadIdea = () => {
     navigate("/uploadIdea");
-  }
+  };
 
   return (
     <section id="home">
@@ -212,10 +252,18 @@ const Home = () => {
               Upload an image of your desired jewellery, and our skilled
               artisans will bring it to life with impeccable craftsmanship.
             </p>
-            <button className="button-74" role="button" onClick={handlePersonlize}>
+            <button
+              className="button-74"
+              role="button"
+              onClick={handlePersonlize}
+            >
               Personalize
             </button>
-            <button className="button-74" role="button" onClick={handleUploadIdea}>
+            <button
+              className="button-74"
+              role="button"
+              onClick={handleUploadIdea}
+            >
               Upload Image
             </button>
           </div>

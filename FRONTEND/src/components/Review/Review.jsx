@@ -1,54 +1,67 @@
-import React from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/effect-coverflow';
-import './review.css';
-import { EffectCoverflow } from 'swiper/modules';
-import quote from '../../assets/quote.png';
-import rev1 from '../../assets/person.jpg';
-
+import React from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/effect-coverflow";
+import "./review.css";
+import { EffectCoverflow } from "swiper/modules";
+import quote from "../../assets/quote.png";
+import rev1 from "../../assets/person.jpg";
 
 const testimonials = [
   {
-    quote: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae assumenda, asperiores eaque deserunt officiis sequi ipsa facere at. Sint, distinctio.',
-    name: 'Adolf Hitler',
-    title: 'Revolutionary Figure',
+    quote:
+      "The gemstone collection here is exquisite. The team was very helpful in guiding me to find the perfect piece for my anniversary.",
+    name: "Emma Johnson",
+    title: "Gemstone Lover",
+    // image: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e",
     image: rev1,
   },
   {
-    quote: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae assumenda, asperiores eaque deserunt officiis sequi ipsa facere at. Sint, distinctio.',
-    name: 'James Gunn',
-    title: 'Revolutionary Figure',
+    quote:
+      "I loved the customized options they provided. I was able to create the perfect diamond ring for my wedding, and it turned out stunning!",
+    name: "Michael Smith",
+    title: "Satisfied Customer",
+    // image: "https://images.unsplash.com/photo-1527980965255-d3b416303d12",
     image: rev1,
   },
   {
-    quote: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae assumenda, asperiores eaque deserunt officiis sequi ipsa facere at. Sint, distinctio.',
-    name: 'Mandy Rose',
-    title: 'Revolutionary Figure',
+    quote:
+      "Their attention to detail and craftsmanship is impeccable. I always find something unique and beautiful whenever I visit their store.",
+    name: "Sophia Brown",
+    title: "Jewelry Enthusiast",
+    // image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2",
     image: rev1,
   },
   {
-    quote: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae assumenda, asperiores eaque deserunt officiis sequi ipsa facere at. Sint, distinctio.',
-    name: 'Ryan Jackson',
-    title: 'Revolutionary Figure',
+    quote:
+      "I brought a design idea with me, and they made it a reality. The custom engagement ring exceeded all my expectations!",
+    name: "James Williams",
+    title: "Happy Fiancé",
+    // image: "https://images.unsplash.com/photo-1502685104226-ee32379fefbe",
     image: rev1,
   },
   {
-    quote: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae assumenda, asperiores eaque deserunt officiis sequi ipsa facere at. Sint, distinctio.',
-    name: 'Yasmine Kessler',
-    title: 'Revolutionary Figure',
+    quote:
+      "From start to finish, the experience was top-notch. They truly care about creating the best experience and products for their customers.",
+    name: "Olivia Davis",
+    title: "Loyal Client",
+    // image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d",
     image: rev1,
   },
   {
-    quote: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae assumenda, asperiores eaque deserunt officiis sequi ipsa facere at. Sint, distinctio.',
-    name: 'Aaron Valentine',
-    title: 'Revolutionary Figure',
+    quote:
+      "The quality of the diamonds is unmatched. I appreciate the transparency and personalized care they offer.",
+    name: "William Taylor",
+    title: "Diamond Collector",
+    // image: "https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d",
     image: rev1,
   },
   {
-    quote: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Beatae assumenda, asperiores eaque deserunt officiis sequi ipsa facere at. Sint, distinctio.',
-    name: 'Thomas Shelby',
-    title: 'Revolutionary Figure',
+    quote:
+      "If you want something special and one-of-a-kind, this is the place to go. They helped me create a piece with sentimental value.",
+    name: "Charlotte Wilson",
+    title: "Sentimental Shopper",
+    // image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e",
     image: rev1,
   },
 ];

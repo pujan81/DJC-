@@ -19,6 +19,18 @@ const getProductById = async (req, res) => {
   }
 };
 
+const searchProduct = async (req, res) => {
+  try {
+    const q = req.params.query;
+    const productList = await Product.find({
+      product_name: { $regex: q, $options: "i" },
+    });
+    res.status(200).json(productList);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 const addProduct = async (req, res) => {
   try {
     const createdProduct = await Product.create(req.body);
@@ -32,4 +44,5 @@ module.exports = {
   getProductsList,
   getProductById,
   addProduct,
+  searchProduct,
 };

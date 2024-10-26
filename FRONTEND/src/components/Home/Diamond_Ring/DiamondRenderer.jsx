@@ -1,13 +1,16 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useContext } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
 import { MeshSurfaceSampler } from "three/examples/jsm/math/MeshSurfaceSampler.js";
+import { Context } from "../../../utils/context";
 
 const DiamondRing = () => {
   const containerRef = useRef(null);
   const sceneRef = useRef(null);
   const animationStarted = useRef(false); // Ref to track animation state
+
+  const { model, setModel } = useContext(Context); // Access model and setModel from context
 
   useEffect(() => {
     const scene = new THREE.Scene();
@@ -19,7 +22,6 @@ const DiamondRing = () => {
     );
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-
     containerRef.current.appendChild(renderer.domElement);
 
     camera.position.z = 220;
@@ -36,35 +38,7 @@ const DiamondRing = () => {
     let paths = [];
     let pathsCompleted = false; // Flag to check if paths are complete
 
-    new OBJLoader().load(
-      "src/assets/diamond_ring3.obj",
-      (obj) => {
-        while (group.children.length > 0) {
-          group.remove(group.children[0]);
-        }
-
-        const mesh = obj.children[0];
-        if (mesh && mesh.geometry && mesh.geometry.isBufferGeometry) {
-          sampler = new MeshSurfaceSampler(mesh).build();
-          for (let i = 0; i < 4; i++) {
-            const path = new Path(i);
-            paths.push(path);
-            group.add(path.line);
-          }
-
-          const scaleFactor = 400;
-          group.scale.set(scaleFactor, scaleFactor, scaleFactor);
-          group.position.set(0, -30, 0);
-        } else {
-          console.error(
-            "Mesh or BufferGeometry not found in the loaded object."
-          );
-        }
-      },
-      (xhr) => console.log((xhr.loaded / xhr.total) * 100 + "% loaded"),
-      (err) => console.error(err)
-    );
-
+    // Define the Path class before using it
     const tempPosition = new THREE.Vector3();
     const materials = [
       new THREE.LineBasicMaterial({
@@ -129,6 +103,44 @@ const DiamondRing = () => {
       }
     }
 
+    // Check if the model is already loaded in the context
+    if (model) {
+      addModelToScene(model);
+    } else {
+      // Load the model and set it to context if not loaded
+      new OBJLoader().load(
+        "src/assets/diamond_ring3.obj",
+        (obj) => {
+          setModel(obj); // Store the loaded model in the context
+          addModelToScene(obj);
+        },
+        (xhr) => console.log((xhr.loaded / xhr.total) * 100 + "% loaded"),
+        (err) => console.error(err)
+      );
+    }
+
+    function addModelToScene(obj) {
+      while (group.children.length > 0) {
+        group.remove(group.children[0]);
+      }
+
+      const mesh = obj.children[0];
+      if (mesh && mesh.geometry && mesh.geometry.isBufferGeometry) {
+        sampler = new MeshSurfaceSampler(mesh).build();
+        for (let i = 0; i < 4; i++) {
+          const path = new Path(i);
+          paths.push(path);
+          group.add(path.line);
+        }
+
+        const scaleFactor = 400;
+        group.scale.set(scaleFactor, scaleFactor, scaleFactor);
+        group.position.set(0, -30, 0);
+      } else {
+        console.error("Mesh or BufferGeometry not found in the loaded object.");
+      }
+    }
+
     function render() {
       if (!animationStarted.current) return;
 
@@ -178,7 +190,7 @@ const DiamondRing = () => {
         containerRef.current.removeChild(renderer.domElement);
       }
     };
-  }, []);
+  }, [model]); // Use model as a dependency
 
   return <div ref={containerRef} style={{ width: "100%", height: "100%" }} />;
 };

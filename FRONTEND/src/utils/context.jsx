@@ -13,6 +13,9 @@ const AppContext = ({ children }) => {
   const [cartSubTotal, setCartSubTotal] = useState(0);
   const [selectedGem, setSelectedGem] = useState(null);
   const [selectedSetting, setSelectedSetting] = useState(null);
+  const [model, setModel] = useState(null);
+  const [diamondModel, setDiamondModel] = useState(null);
+  const [isInitialized, setIsInitialized] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -80,6 +83,12 @@ const AppContext = ({ children }) => {
         setSelectedGem,
         selectedSetting,
         setSelectedSetting,
+        model,
+        setModel,
+        isInitialized,
+        setIsInitialized,
+        diamondModel,
+        setDiamondModel,
       }}
     >
       {children}

@@ -12,9 +12,9 @@ const Filters = ({ onFilterChange }) => {
       <div className={styles.left}>
         <select id="price-filter" onChange={handleFilterChange("price")}>
           <option value="">PRICE</option>
-          <option value="under-100">Under ₹100</option>
-          <option value="under-500">Under ₹500</option>
-          <option value="under-1000">Under ₹1000</option>
+          <option value="under-100000">Under ₹100000</option>
+          <option value="under-500000">Under ₹500000</option>
+          <option value="under-1000000">Under ₹1000000</option>
         </select>
 
         <select id="category-filter" onChange={handleFilterChange("category")}>

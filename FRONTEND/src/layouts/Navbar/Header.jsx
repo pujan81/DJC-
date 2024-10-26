@@ -5,8 +5,8 @@ import React, {
   useCallback,
   useContext,
 } from "react";
-import { TbSearch } from "react-icons/tb";
-import { IoBagOutline } from "react-icons/io5";
+import { TbHistoryToggle, TbSearch } from "react-icons/tb";
+import { IoBagOutline, IoLogOutOutline } from "react-icons/io5";
 import { LuUser } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import styles from "./Header.module.css";
@@ -61,9 +61,14 @@ const Header = ({ isAuthenticated, setIsAuthenticated }) => {
     navigate("/login");
   }, [navigate]);
 
+  const handleOrdersClick = () => {
+    navigate("/orders");
+  };
+
   const userInfo = JSON.parse(localStorage.getItem("user-info") || "{}");
   const userName = userInfo.name || "Guest";
   const userImage = userInfo.image || "";
+  // console.log(userInfo);
 
   const navItems = ["Home", "About", "Consulting", "Blogs"];
 
@@ -98,14 +103,20 @@ const Header = ({ isAuthenticated, setIsAuthenticated }) => {
                             className={styles.userImage}
                           />
                         )}
-                        <span className={styles.userName}>{userName}</span>
+                        <span className={styles.userName}>
+                          Hello, {userName}
+                        </span>
+                        <div className={styles.btnContainer}>
+                          <IoLogOutOutline
+                            className={styles.ddlbutton}
+                            onClick={handleLogout}
+                          />
+                          <TbHistoryToggle
+                            className={styles.ddlbutton}
+                            onClick={handleOrdersClick}
+                          />
+                        </div>
                       </div>
-                      <button
-                        className={styles.dropdownButton}
-                        onClick={handleLogout}
-                      >
-                        Logout
-                      </button>
                     </>
                   ) : (
                     <button
