@@ -31,7 +31,7 @@ app.use("/api/cproducts", cproductRoute);
 app.use("/api/cproduct-order", isLoggedIn, cproductorderRoute);
 app.use("/api/gemstones", gemstoneRoute);
 app.use("/api/users", userRoute);
-app.use("/api/orders", isLoggedIn, orderRoute);
+app.use("/api/orders", orderRoute);
 app.use("/api/payments", paymentRoute);
 app.use("/api/cart", cartRoute);
 app.use("/api/wishlist", wishlistRoute);

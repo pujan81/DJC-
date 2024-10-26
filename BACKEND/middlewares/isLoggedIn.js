@@ -28,6 +28,7 @@ module.exports = async function (req, res, next) {
 
     // Find the user by the decoded ID
     const user = await User.findOne({ _id: decoded._id });
+    
     if (!user) {
       throw new Error();
     }

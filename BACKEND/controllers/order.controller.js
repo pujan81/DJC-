@@ -2,16 +2,16 @@ const Order = require("../models/order.model");
 const OrderItem = require("../models/orderItem.model");
 const Product = require("../models/product.model");
 const mongoose = require('mongoose');
+const Payment = require("../models/payment.model"); // Import the Payment model
 
 const getAllOrders = async (req, res) => {
   try {
-    const orderList = await Order.find().sort({ order_datetime: -1 });
-    res.status(200).json(orderList);
-  } catch (err) {
-    res.status(500).json({ message: "Orders not found" });
+    const orders = await Payment.find().sort({ createdAt: -1 });
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
-
 const getOrdersbyStatus = async (req, res) => {
   try {
     const { status } = req.params;
@@ -24,33 +24,14 @@ const getOrdersbyStatus = async (req, res) => {
     res.status(500).json({ message: "Error fetching orders by status" });
   }
 };
-const getOrdersByUser = async (req, res) => {
+const getOrdersByUserId = async (req, res) => {
+  const { userid } = req.params;
+  
   try {
-    const userid = req.params.userid;
-
-    // Convert userid to ObjectId
-    const userObjectId = new mongoose.Types.ObjectId(userid);
-
-    const orders = await Order.aggregate([
-      {
-        $match: { user_id: userObjectId }
-      },
-      {
-        $lookup: {
-          from: 'orderitems', // Note: MongoDB uses the lowercase collection name
-          localField: '_id',
-          foreignField: 'order_id',
-          as: 'orderItems'
-        }
-      }
-    ]);
-    if (!orders || orders.length == 0) {
-      return res.status(404).json({ message: "No orders found for the user" });
-    }
-
-    res.status(200).json(orders);
+    const orders = await Payment.find({ user_id: userid });
+    res.json(orders);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching orders for the user", error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -85,6 +66,7 @@ const getOrdersByDate = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
 
 const createOrder = async (req,res) => {
   try {
@@ -150,8 +132,31 @@ const createOrder = async (req,res) => {
   }
 }
 
+
+const updateDeliveryStatus = async (req, res) => {
+  const { paymentId } = req.params; // Should match the route parameter in router
+  const { delivery_status } = req.body; // New delivery status from request body
+
+  try {
+    // Update delivery status
+    const updatedPayment = await Payment.findByIdAndUpdate(
+      paymentId,
+      { delivery_status },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedPayment) {
+      return res.status(404).json({ error: "Payment not found" });
+    }
+
+    res.json(updatedPayment);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 module.exports = {
-  getOrdersByUser,
+  updateDeliveryStatus,
+  getOrdersByUserId,
   getOrdersByDate,
   getAllOrders,
   getOrdersbyStatus,

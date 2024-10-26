@@ -19,9 +19,14 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import RefreshHandler from "./utils/RefreshHandler";
 import Login from "./components/Auth/Login";
 import AppContext from "./utils/context";
+import Orders from "./components/Orders/Orders";
+import AdminOrders from "./components/Admin/Admin";
 
-function App() {
+// Main content component that uses router hooks
+function MainContent() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const location = useLocation();
+  
   const userInfo = JSON.parse(localStorage.getItem("user-info"));
   const isAdmin = userInfo ? userInfo.isAdmin : false;
 
@@ -31,37 +36,11 @@ function App() {
     }
   }, [userInfo]);
 
-  const PrivateRoute = ({ element }) => {
-    return isAuthenticated ? element : <Navigate to="/login" />;
-  };
-
+ 
   const AdminRoute = ({ element }) => {
     return isAdmin ? element : <Navigate to="/" />;
   };
-  return (
-    <>
-      <BrowserRouter>
-        <AppContext>
-          <RefreshHandler setisAuthenticated={setIsAuthenticated} />
-          <MainContent
-            isAuthenticated={isAuthenticated}
-            setIsAuthenticated={setIsAuthenticated}
-          />
-        </AppContext>
-      </BrowserRouter>
-    </>
-  );
-}
 
-const MainContent = ({ isAuthenticated, setIsAuthenticated }) => {
-  const PrivateRoute = ({ element }) => {
-    return isAuthenticated ? element : <Navigate to="/login" />;
-  };
-
-  const AdminRoute = ({ element }) => {
-    return isAdmin ? element : <Navigate to="/" />;
-  };
-  const location = useLocation();
   const GoogleAuthWrapper = () => (
     <GoogleOAuthProvider clientId="522736900594-495381hqv5ueu8ie1qgvhf5ji4kt2f1i.apps.googleusercontent.com">
       <Login setIsAuthenticated={setIsAuthenticated} />
@@ -77,6 +56,8 @@ const MainContent = ({ isAuthenticated, setIsAuthenticated }) => {
           setIsAuthenticated={setIsAuthenticated}
         />
       )}
+    <RefreshHandler setIsAuthenticated={setIsAuthenticated} />
+
       <Routes>
         <Route path="/login" element={<GoogleAuthWrapper />} />
         <Route path="/" element={<Home_Page />} />
@@ -91,11 +72,29 @@ const MainContent = ({ isAuthenticated, setIsAuthenticated }) => {
           path="/uploadIdea"
           element={<Personalize_Page checkPageOne={false} />}
         />
-        {/* <Route path="*" element={<Navigate to="/login" />} /> */}
+        <Route
+          path="/orders"
+ element={<Orders />}
+        />
+        <Route
+          path="/admin_panel"
+          element={<AdminRoute element={<AdminOrders />} />}
+        />
       </Routes>
       <Footer />
     </>
   );
-};
+}
+
+// App component that provides router context
+function App() {
+  return (
+    <BrowserRouter>
+      <AppContext>
+        <MainContent />
+      </AppContext>
+    </BrowserRouter>
+  );
+}
 
 export default App;
