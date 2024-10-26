@@ -28,7 +28,6 @@ export const fetchDataFromApi = async (url) => {
 // Function to update data
 export const updateData = async (url, updatedData) => {
   const user = useUser();
-  const user = useUser();
   try {
     const { data } = await axiosInstance.put(url, updatedData);
     return data;
