@@ -10,6 +10,10 @@ const getAllOrders = async (req, res) => {
     res.json(orders);
   } catch (error) {
     res.status(500).json({ error: error.message });
+    const orders = await Payment.find().sort({ createdAt: -1 });
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };
 const getOrdersbyStatus = async (req, res) => {
@@ -31,6 +35,7 @@ const getOrdersByUserId = async (req, res) => {
     const orders = await Payment.find({ user_id: userid });
     res.json(orders);
   } catch (error) {
+    res.status(500).json({ error: error.message });
     res.status(500).json({ error: error.message });
   }
 };
@@ -155,6 +160,8 @@ const updateDeliveryStatus = async (req, res) => {
   }
 };
 module.exports = {
+  updateDeliveryStatus,
+  getOrdersByUserId,
   updateDeliveryStatus,
   getOrdersByUserId,
   getOrdersByDate,

@@ -21,7 +21,11 @@ import Login from "./components/Auth/Login";
 import AppContext from "./utils/context";
 import Orders from "./components/Orders/Orders";
 import AdminOrders from "./components/Admin/Admin";
+import Orders from "./components/Orders/Orders";
+import AdminOrders from "./components/Admin/Admin";
 
+// Main content component that uses router hooks
+function MainContent() {
 // Main content component that uses router hooks
 function MainContent() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -39,6 +43,7 @@ function MainContent() {
   const AdminRoute = ({ element }) => {
     return isAdmin ? element : <Navigate to="/" />;
   };
+
 
   const GoogleAuthWrapper = () => (
     <GoogleOAuthProvider clientId="522736900594-495381hqv5ueu8ie1qgvhf5ji4kt2f1i.apps.googleusercontent.com">
@@ -80,6 +85,18 @@ function MainContent() {
       <Footer />
     </>
   );
+}
+
+// App component that provides router context
+function App() {
+  return (
+    <BrowserRouter>
+      <AppContext>
+        <MainContent />
+      </AppContext>
+    </BrowserRouter>
+  );
+}
 }
 
 // App component that provides router context
